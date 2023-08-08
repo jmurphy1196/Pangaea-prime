@@ -43,13 +43,16 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
-    await queryInterface.addConstraint("ProductCategories", {
-      fields: ["product_id", "category_id"],
-      type: "unique",
-      name: "unique_product_category_constraint",
-    });
+    await queryInterface.addConstraint(
+      "ProductCategories",
+      {
+        fields: ["product_id", "category_id"],
+        type: "unique",
+        name: "unique_product_category_constraint",
+      },
+      options
+    );
   },
-  options,
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("ProductCategories");
   },

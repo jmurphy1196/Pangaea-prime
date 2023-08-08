@@ -9,49 +9,52 @@ if (process.env.NODE_ENV === "production") {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Ratings", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      product_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Products",
-          key: "id",
+    await queryInterface.createTable(
+      "Ratings",
+      {
+        id: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: Sequelize.INTEGER,
         },
-        allowNull: false,
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id",
+        product_id: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Products",
+            key: "id",
+          },
+          allowNull: false,
         },
-        allowNull: false,
+        user_id: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Users",
+            key: "id",
+          },
+          allowNull: false,
+        },
+        rating: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
+        review: {
+          type: Sequelize.TEXT,
+        },
+        createdAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE,
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
       },
-      rating: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      review: {
-        type: Sequelize.TEXT,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
-    });
+      options
+    );
   },
-  options,
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Ratings");
   },
