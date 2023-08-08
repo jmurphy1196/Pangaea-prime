@@ -19,5 +19,23 @@ class BadReqestError extends CustomError {
     this.status = 400;
   }
 }
+class NotFoundError extends CustomError {
+  constructor(msg, errors = {}, title = "") {
+    super(msg, errors, title);
+    this.status = 404;
+  }
+}
 
-module.exports = { UnauthorizedError, BadReqestError };
+class ForbiddenError extends CustomError {
+  constructor(msg, errors = {}, title = "") {
+    super(msg, errors, title);
+    this.status = 403;
+  }
+}
+
+module.exports = {
+  UnauthorizedError,
+  BadReqestError,
+  NotFoundError,
+  ForbiddenError,
+};

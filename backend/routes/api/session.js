@@ -1,23 +1,11 @@
 const router = require("express").Router();
-const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../util/validation");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
 const { setTokenCookie, restoreUser } = require("../../util/auth");
 const { User } = require("../../db/models");
 const { UnauthorizedError } = require("../../errors");
-
-const validateLogin = [
-  check("credential")
-    .exists({ checkFalsy: true })
-    .notEmpty()
-    .withMessage("Please provide a valid username or email"),
-  check("password")
-    .exists({ checkFalsy: true })
-    .withMessage("Please provide a password"),
-  handleValidationErrors,
-];
+const { validateLogin } = require("../../middleware");
 
 router.get("/", (req, res) => {
   const { user } = req;

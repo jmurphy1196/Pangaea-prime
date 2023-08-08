@@ -1,16 +1,14 @@
 "use strict";
-
 let options = {};
 if (process.env.NODE_ENV === "production") {
-  options.schema = process.env.SCHEMA; // define your schema in options object
-  options.tableName = "Categories";
+  options.schema = process.env.SCHEMA;
+  options.tableName = "Brands";
 }
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "Categories",
+      "Brands",
       {
         id: {
           allowNull: false,
@@ -20,10 +18,7 @@ module.exports = {
         },
         name: {
           type: Sequelize.STRING,
-          allowNull: false,
-        },
-        description: {
-          type: Sequelize.TEXT,
+          unique: true,
         },
         createdAt: {
           allowNull: false,
@@ -40,6 +35,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Categories");
+    await queryInterface.dropTable("Brands");
   },
 };

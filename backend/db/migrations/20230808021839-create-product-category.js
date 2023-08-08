@@ -47,11 +47,19 @@ module.exports = {
       },
       options
     );
-    await queryInterface.addConstraint(options, {
-      fields: ["product_id", "category_id"],
-      type: "unique",
-      name: "unique_product_category_constraint",
-    });
+    if (process.env.NODE_ENV === "production") {
+      await queryInterface.addConstraint(options, {
+        fields: ["product_id", "category_id"],
+        type: "unique",
+        name: "unique_product_category_constraint",
+      });
+    } else {
+      await queryInterface.addConstraint("ProductCategories", {
+        fields: ["product_id", "category_id"],
+        type: "unique",
+        name: "unique_product_category_constraint",
+      });
+    }
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("ProductCategories");

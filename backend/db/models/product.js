@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "product_id",
         as: "ratings",
       });
+      Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
     }
   }
   Product.init(
@@ -52,6 +53,13 @@ module.exports = (sequelize, DataTypes) => {
           min: 1,
         },
       },
+      brand_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Brands",
+          key: "id",
+        },
+      },
       stock_quantity: {
         type: DataTypes.INTEGER,
         validate: {
@@ -68,6 +76,8 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
         allowNull: false,
+        defaultValue:
+          "https://pangaea-prime.s3.us-west-1.amazonaws.com/placeholder.jpg",
       },
       additional_images: {
         type: DataTypes.JSON,
@@ -77,6 +87,19 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Product",
+      defaultScope: {
+        include: [
+          {
+            model: sequelize.models.Category,
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: sequelize.models.Brand,
+          },
+        ],
+      },
     }
   );
   return Product;

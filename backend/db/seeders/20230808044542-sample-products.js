@@ -21,6 +21,7 @@ module.exports = {
           additional_images: JSON.stringify({
             urls: ["https://example.com/sample-product-1-additional1.jpg"],
           }),
+          brand_id: 1,
         },
         {
           product_name: "Sample Product 2",
@@ -35,6 +36,7 @@ module.exports = {
               "https://example.com/sample-product-1-additional2.jpg",
             ],
           }),
+          brand_id: 1,
         },
       ],
       {}

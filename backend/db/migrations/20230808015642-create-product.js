@@ -39,6 +39,13 @@ module.exports = {
           onUpdate: "CASCADE",
           onDelete: "SET NULL",
         },
+        brand_id: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Brands",
+            key: "id",
+          },
+        },
         stock_quantity: {
           type: Sequelize.INTEGER,
           allowNull: false,
@@ -46,6 +53,8 @@ module.exports = {
         main_image: {
           type: Sequelize.STRING,
           allowNull: false,
+          defaultValue:
+            "https://pangaea-prime.s3.us-west-1.amazonaws.com/placeholder.jpg",
         },
         additional_images: {
           type: Sequelize.JSON,
