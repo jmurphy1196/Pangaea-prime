@@ -3,8 +3,8 @@
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
-  options.tableName = "ProductCategories";
 }
+options.tableName = "ProductCategories";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -47,7 +47,7 @@ module.exports = {
       },
       options
     );
-    await queryInterface.addConstraint("ProductCategories", options, {
+    await queryInterface.addConstraint(options, {
       fields: ["product_id", "category_id"],
       type: "unique",
       name: "unique_product_category_constraint",
