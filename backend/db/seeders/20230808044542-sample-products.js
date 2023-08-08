@@ -18,8 +18,9 @@ module.exports = {
           seller_id: 1,
           stock_quantity: 100,
           main_image: "https://example.com/sample-product-1.jpg",
-          additional_images:
-            "https://example.com/sample-product-1-additional.jpg",
+          additional_images: JSON.stringify({
+            urls: ["https://example.com/sample-product-1-additional1.jpg"],
+          }),
         },
         {
           product_name: "Sample Product 2",
