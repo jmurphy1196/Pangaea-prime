@@ -1,0 +1,12 @@
+:root {
+    --primary: #ff9900;
+    --secondary: #146eb4;
+    --light: #f2f2f2;
+    --text-color: #000000;
+    --accent: 	#232f3e;
+    --xs-phone: 576px;
+    --sm-phone: 767px;
+    --md-tablet: 991px;
+    --lg-desktop: 1199px;
+    --xl-desktop: 1200px;
+}

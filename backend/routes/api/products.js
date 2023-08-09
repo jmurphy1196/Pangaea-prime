@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Product, Brand, Category } = require("../../db/models");
+const { Product, Brand, Category, Rating } = require("../../db/models");
 const { Op } = require("sequelize");
 const {
   NotFoundError,
@@ -15,6 +15,7 @@ const {
   checkUserCanEditProduct,
 } = require("../../middleware");
 const multer = require("multer");
+const { checkProductUpdateFields } = require("../../middleware/product");
 router.get("/", async (req, res, next) => {
   try {
     //sqlite does not support iLike
@@ -23,12 +24,39 @@ router.get("/", async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 15;
     const offset = (+req.query.page - 1) * limit || 0;
     const product_name = req.query.name || "";
-    const products = await Product.findAll({
-      where: {
-        product_name: {
-          [likeOperator]: `%${product_name}%`,
+    let categories = req.query.categories;
+
+    if (typeof categories === "string") categories = categories.split(",");
+
+    let whereClause = {
+      product_name: {
+        [likeOperator]: `%${product_name}%`,
+      },
+    };
+
+    const includeClause = [
+      {
+        model: Category,
+        as: "Categories",
+        through: {
+          attributes: [],
         },
       },
+      {
+        model: Brand,
+      },
+    ];
+    if (categories && categories.length) {
+      includeClause[0].where = {
+        name: {
+          [Op.in]: categories,
+        },
+      };
+    }
+
+    const products = await Product.unscoped().findAll({
+      where: whereClause,
+      include: includeClause,
       limit,
       offset,
     });
@@ -46,6 +74,7 @@ router.get("/:productId", checkProductExists, async (req, res, next) => {
 
 router.post(
   "/:productId/images",
+  checkProductExists,
   uploadProductImage.fields([
     {
       name: "main_image",
@@ -129,7 +158,46 @@ router.put(
   "/:productId",
   checkProductExists,
   checkUserCanEditProduct,
-  async (req, res, next) => {}
+  checkProductUpdateFields,
+  async (req, res, next) => {
+    const {
+      product_name,
+      price,
+      description,
+      stock_quantity,
+      brand,
+      categories,
+    } = req.body;
+
+    [product_name, price, description, stock_quantity].forEach((field) => {
+      if (field) {
+        req.product[field] = field;
+      }
+    });
+    if (brand) {
+      let brand_obj = await Brand.findOne({ where: { name: brand } });
+      if (!brand_obj) {
+        brand_obj = await Brand.create({ name: brand });
+        req.product.brand_id = brand_obj.id;
+      }
+    }
+    // TODO possible bug, updated category may not show up in first response
+    if (categories) {
+      for (let categoryName of categories) {
+        let category = await Category.findOne({
+          where: { name: categoryName },
+        });
+
+        if (!category) {
+          category = await Category.create({ name: categoryName });
+        }
+
+        await req.product.addCategory(category);
+      }
+    }
+    await req.product.save();
+    return res.status(200).json(req.product);
+  }
 );
 
 module.exports = router;

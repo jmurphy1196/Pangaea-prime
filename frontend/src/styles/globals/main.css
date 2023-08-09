@@ -1,0 +1,42 @@
+
+@import url('./_typography.css');
+@import url('./_variables.css');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit
+}
+input, button, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+input {
+    color: black;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+button {
+    cursor: pointer;
+}
+.main__container {
+    display: flex;
+    flex-direction: column;
+}
+.hidden {
+  display: none !important;
+}
+

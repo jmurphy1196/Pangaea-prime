@@ -1,0 +1,140 @@
+.navbar {
+    width: 100%;
+    background-color: var(--text-color);
+    color: var(--light);
+    padding: 10px 30px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.navbar__container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.navbar__image {
+    width: 100px;
+}
+.navbar__image img {
+    object-fit: cover;
+}
+.navbar__location {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.navbar__location > span {
+    color: lightgray;
+    font-size: 1rem;
+}
+
+.navbar__location > p {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.navbar__container__left {
+}
+.navbar__container__middle {
+    display: flex;
+    width: 60%;
+    align-items: center;
+
+}
+.navbar__container__middle input {
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    padding-right: 40px;
+    padding-left: 5px;
+    
+}
+
+.navbar__search-container {
+    display: flex;
+    width: 100%;
+    position: relative;
+    height: 40px;
+}
+
+
+.navbar__search-icon {
+    background-color: var(--primary);
+    border-radius:5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 40px;
+    height: 38px;
+    left: 100%;
+    top: 1px;
+    transform: translateX(-100%);
+    border: none;
+}
+
+.navbar__container__right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar__container__right button {
+    background-color: var(--text-color);
+    outline: none;
+    border: none;
+    text-align: start;
+    font-size: .9rem;
+    line-height: 1.1;
+    padding: 2px 10px;
+}
+.navbar__container__right button > span {
+    font-size: 1.04rem;
+    font-weight: 700;
+}
+.navbar__actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+
+
+.arrow {
+    transform: translateY(20%);
+    padding-left: 2px;
+}
+.navbar__actions__item {
+    display: flex;
+    align-items: center;
+}
+.cart {
+    font-size: 1.4rem;
+}
+
+.subbar {
+    background-color: var(--accent);
+    color: var(--light);
+    display: flex;
+    padding: 4px 10px;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+}
+.subbar button {
+    background-color: var(--accent);
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+.sublinks {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}

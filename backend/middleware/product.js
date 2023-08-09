@@ -52,9 +52,31 @@ const checkProductFields = [
   handleValidationErrors,
 ];
 
+const checkProductUpdateFields = [
+  check("product_name")
+    .optional()
+    .isLength({ min: 3, max: 200 })
+    .withMessage("product name must be between 3 and 200 characters"),
+  check("price")
+    .optional()
+    .isFloat({ min: 0, max: 999999 })
+    .withMessage("price must be between 0 and 999999"),
+  check("description")
+    .optional()
+    .isLength({ min: 10, max: 600 })
+    .withMessage("description must be between 10 and 600 characters"),
+  check("stock_quantity")
+    .optional()
+    .isInt({ min: 0, max: 999999 })
+    .withMessage("stock quantity must be between 0 and 999999"),
+  check("brand").optional().isLength({ min: 1, max: 30 }),
+  check("categories").optional().isArray({ min: 1, max: 20 }),
+  handleValidationErrors,
+];
 module.exports = {
   checkProductFields,
   checkMainImage,
   checkProductExists,
   checkUserCanEditProduct,
+  checkProductUpdateFields,
 };

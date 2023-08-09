@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         validate: {
           notEmpty: true,
-          len: [1, 255], // Assuming a max length of 255 for product name
+          len: [1, 255],
         },
         allowNull: false,
       },
