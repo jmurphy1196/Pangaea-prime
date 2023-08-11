@@ -65,7 +65,13 @@ router.get("/", async (req, res, next) => {
           SELECT AVG(Rating)
           FROM Ratings
           WHERE 
-          "Ratings"."product_id" = "Product"."id"
+          ${
+            process.env.NODE_ENV === "production"
+              ? `${process.env.SCHEMA}.`
+              : ""
+          }"Ratings"."product_id" = ${
+              process.NODE_ENV === "production" ? `${process.env.SCHEMA}.` : ""
+            }"Product"."id"
         )`),
             "avgRating",
           ],
