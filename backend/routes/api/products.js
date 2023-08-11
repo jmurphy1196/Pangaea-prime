@@ -65,7 +65,7 @@ router.get("/", async (req, res, next) => {
           SELECT AVG(Rating)
           FROM Ratings
           WHERE 
-            Ratings.product_id = Product.id
+          "Ratings"."product_id" = "Product"."id"
         )`),
             "avgRating",
           ],
