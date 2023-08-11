@@ -54,6 +54,7 @@ router.get("/", async (req, res, next) => {
     }
     const SCHEMA =
       process.env.NODE_ENV === "production" ? `${process.env.SCHEMA}.` : "";
+
     const products = await Product.unscoped().findAll({
       where: whereClause,
       include: includeClause,
@@ -63,9 +64,9 @@ router.get("/", async (req, res, next) => {
         include: [
           [
             Sequelize.literal(`(
-            SELECT AVG(rating)
-            FROM ${SCHEMA}"Ratings"
-            WHERE ${SCHEMA}"Ratings"."product_id" = ${SCHEMA}"Product"."id"
+          SELECT AVG(rating)
+          FROM ${SCHEMA}"Ratings"
+          WHERE ${SCHEMA}"Ratings"."product_id" = "Product"."id"
         )`),
             "avgRating",
           ],
