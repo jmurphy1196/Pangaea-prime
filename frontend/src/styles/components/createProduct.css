@@ -10,10 +10,10 @@
     padding: 50px;
 
 }
-form h1 {
+.product__create__form  h1 {
     text-align: center;
 }
-form input {
+.product__create__form  input {
     outline: none;
     border: 1px solid gray;
     border-top: none;
@@ -29,13 +29,13 @@ form input {
     
 }
 
-form label {
+.product__create__form label {
     position: absolute;
     transition: all .3s ease;
     bottom: 2px;
 }
 
-label.filled {
+.product__create__form label.filled {
     transform: translateY(-90%);
 }
 
