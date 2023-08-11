@@ -51,7 +51,7 @@ export function Product({ productId }) {
               })}
               <span>
                 {product.avgRating !== null
-                  ? product.avgRating.toFixed(2)
+                  ? Number(product.avgRating).toFixed(2)
                   : 0.0}
               </span>
             </div>
