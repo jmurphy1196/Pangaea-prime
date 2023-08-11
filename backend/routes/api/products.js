@@ -62,7 +62,7 @@ router.get("/", async (req, res, next) => {
         include: [
           [
             Sequelize.literal(`(
-          SELECT AVG(rating)
+          SELECT AVG(Rating)
           FROM Ratings
           WHERE 
             Ratings.product_id = Product.id
