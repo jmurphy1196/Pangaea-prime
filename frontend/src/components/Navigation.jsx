@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom";
 import {
   faLocationDot,
-  faAngleDown,
   faSearch,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/components/navbar.css";
 
 export function Navigation() {
+  const user = useSelector((state) => state.session.user);
+  const [search, setSearch] = useState("");
   const [location, setLocation] = useState({
     lat: null,
     lng: null,
     error: null,
   });
+  const history = useHistory();
 
   useEffect(() => {
     // Get the user's current position
@@ -36,14 +39,19 @@ export function Navigation() {
     );
   }, []);
 
-  console.log("THis is the location", location);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    history.push(`/products?name=${search}`);
+  };
 
   return (
     <>
       <nav className='navbar'>
         <div className='navbar__container navbar__container__left'>
           <div className='navbar__image'>
-            <img src='/images/logo.png' alt='' />
+            <Link to='/'>
+              <img src='/images/pangaea-logo.png' alt='' />
+            </Link>
           </div>
           <div className='navbar__location'>
             <span>
@@ -60,8 +68,16 @@ export function Navigation() {
         </div>
         <div className='navbar__container navbar__container__middle'>
           <div className='navbar__search-container'>
-            <input type='text' />
-            <button className='navbar__search-icon'>
+            <input
+              type='text'
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(e);
+                }
+              }}
+            />
+            <button className='navbar__search-icon' onClick={handleSearch}>
               <FontAwesomeIcon icon={faSearch} width={30} />
             </button>
           </div>
@@ -69,12 +85,11 @@ export function Navigation() {
         <div className='navbar__container navbar__container__right'>
           <div className='navbar__actions'>
             <div className='navbar__actions__item'>
-              <button>
-                Hello, sign in
+              <Link to='/account'>
+                {user ? `Hello, ${user.firstName}` : `Hello, sign in`}
                 <br />
                 <span>Account & Lists</span>
-                <FontAwesomeIcon className='arrow' icon={faAngleDown} />
-              </button>
+              </Link>
             </div>
             <div className='navbar__actions__item'>
               <button>
@@ -108,7 +123,7 @@ export function Navigation() {
           <Link>Fashion</Link>
           <Link>Medical</Link>
           <Link>Automotive</Link>
-          <Link>Sell</Link>
+          <Link to='/sell'>Sell</Link>
         </div>
       </nav>
     </>

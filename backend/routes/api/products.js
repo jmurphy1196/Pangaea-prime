@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Product, Brand, Category, Rating } = require("../../db/models");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const {
   NotFoundError,
   ForbiddenError,
@@ -33,7 +33,6 @@ router.get("/", async (req, res, next) => {
         [likeOperator]: `%${product_name}%`,
       },
     };
-
     const includeClause = [
       {
         model: Category,
@@ -59,6 +58,19 @@ router.get("/", async (req, res, next) => {
       include: includeClause,
       limit,
       offset,
+      attributes: {
+        include: [
+          [
+            Sequelize.literal(`(
+          SELECT AVG(rating)
+          FROM Ratings
+          WHERE 
+            Ratings.product_id = Product.id
+        )`),
+            "avgRating",
+          ],
+        ],
+      },
     });
     if (!products.length)
       return next(new NotFoundError(`Products ${product_name} not found`));

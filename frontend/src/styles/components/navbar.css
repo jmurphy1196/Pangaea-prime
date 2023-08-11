@@ -36,6 +36,8 @@
 }
 
 .navbar__container__left {
+    display: flex;
+    gap: 15px;
 }
 .navbar__container__middle {
     display: flex;
@@ -112,6 +114,13 @@
 }
 .cart {
     font-size: 1.4rem;
+}
+.navbar__actions__item a {
+    line-height: 1.1;
+}
+.navbar__actions__item a > span {
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
 .subbar {

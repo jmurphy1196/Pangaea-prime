@@ -4,6 +4,11 @@ import { thunkGetSession } from "./store/session";
 import { Navigation } from "./components/Navigation";
 import { Switch, Route } from "react-router-dom";
 import { LandingPage } from "./components/pages/LandingPage";
+import { Auth } from "./components/auth/Auth";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { MyAccount } from "./components/account/MyAccount";
+import { ProductsPage } from "./components/pages/ProductsPage";
+import { SellPage } from "./components/pages/SellPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +28,21 @@ function App() {
         <Route exact path='/'>
           <LandingPage />
         </Route>
+        <Route exact path='/signin'>
+          <Auth signin />
+        </Route>
+        <Route exact path='/signup'>
+          <Auth signup />
+        </Route>
+        <Route path='/products'>
+          <ProductsPage />
+        </Route>
+        <ProtectedRoute exact path='/sell'>
+          <SellPage />
+        </ProtectedRoute>
+        <ProtectedRoute exact path='/account'>
+          <MyAccount />
+        </ProtectedRoute>
       </Switch>
     </>
   );

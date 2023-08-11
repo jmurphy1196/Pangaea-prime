@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const routes = require("./routes");
 const { ValidationError } = require("sequelize");
 const { environment } = require("./config");
+const { BadReqestError } = require("./errors");
 
 const isProduction = environment === "production";
 
@@ -49,8 +50,8 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  let errors = {};
   if (err instanceof ValidationError) {
-    let errors = {};
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
@@ -69,6 +70,5 @@ app.use((err, req, res, next) => {
     stack: isProduction ? null : err.stack,
   });
 });
-
 
 module.exports = app;

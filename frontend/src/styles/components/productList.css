@@ -1,0 +1,39 @@
+.product__container {
+    border: 1px solid var(--light);
+    border-radius: 5px;
+    display: flex;
+}
+
+.product__image {
+    width: 300px;
+}
+
+.product__information {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 10px;
+}
+
+.stars {
+    color: var(--primary)
+}
+
+.product__stars  {
+    display: flex;
+    align-items: center;
+}
+.product__stars > span {
+    color: gray;
+    margin-left: 5px;
+}
+.product__brand {
+    text-decoration: underline;
+}
+
+.products__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 60%;
+}
