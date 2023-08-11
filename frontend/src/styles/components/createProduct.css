@@ -58,6 +58,7 @@
     flex-direction: column;
     gap: 30px;
     cursor: pointer;
+    transition: all .2s ease;
 }
 .product__create__form__main-image__uploaded {
     border: 1px solid var(--light);
