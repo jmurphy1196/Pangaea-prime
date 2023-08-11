@@ -62,8 +62,12 @@ router.get("/", async (req, res, next) => {
         include: [
           [
             Sequelize.literal(`(
-          SELECT AVG(Rating)
-          FROM Ratings
+          SELECT AVG(rating)
+          FROM ${
+            process.env.NODE_ENV === "production"
+              ? `${process.env.SCHEMA}.`
+              : ""
+          }Ratings
           WHERE 
           ${
             process.env.NODE_ENV === "production"
