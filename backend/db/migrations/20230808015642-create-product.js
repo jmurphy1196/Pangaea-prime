@@ -58,6 +58,7 @@ module.exports = {
         },
         additional_images: {
           type: Sequelize.JSON,
+          defaultValue: JSON.stringify({ urls: [] }),
         },
         createdAt: {
           allowNull: false,

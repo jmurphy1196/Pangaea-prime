@@ -23,6 +23,34 @@ module.exports = {
           name: "Clothing",
           description: "Men's, women's, and children's clothing.",
         },
+        {
+          name: "Home",
+          description: "Furniture, decor, gardening tools, and more.",
+        },
+        {
+          name: "Sports",
+          description: "Sporting goods, outdoor equipment, and more.",
+        },
+        {
+          name: "Games",
+          description: "Toys, board games, and more for kids and adults.",
+        },
+        {
+          name: "Beauty",
+          description: "Cosmetics, skincare, health supplements, and more.",
+        },
+        {
+          name: "Automotive",
+          description: "Car parts, accessories, tools, and more.",
+        },
+        {
+          name: "Music",
+          description: "Instruments, music albums, movies, and more.",
+        },
+        {
+          name: "Grocery",
+          description: "Food items, cleaning supplies, and more.",
+        },
       ],
       options
     );

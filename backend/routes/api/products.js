@@ -1,5 +1,11 @@
 const router = require("express").Router();
-const { Product, Brand, Category, Rating } = require("../../db/models");
+const {
+  Product,
+  Brand,
+  Category,
+  Rating,
+  ProductCategory,
+} = require("../../db/models");
 const { Op, Sequelize } = require("sequelize");
 const {
   NotFoundError,
@@ -16,6 +22,7 @@ const {
 } = require("../../middleware");
 const multer = require("multer");
 const { checkProductUpdateFields } = require("../../middleware/product");
+const { deleteS3Obj } = require("../../util/s3");
 router.get("/", async (req, res, next) => {
   try {
     //sqlite does not support iLike
@@ -82,7 +89,11 @@ router.get("/", async (req, res, next) => {
   }
 });
 router.get("/:productId", checkProductExists, async (req, res, next) => {
-  return res.status(200).json(req.product);
+  const fullProduct = await Product.scope("ratings").findByPk(
+    req.params.productId
+  );
+
+  return res.status(200).json(fullProduct);
 });
 
 router.post(
@@ -94,17 +105,23 @@ router.post(
       maxCount: 1,
     },
     {
-      name: "additional_images",
-      maxCount: 12,
+      name: "additional_images[]",
+      maxCount: 4,
     },
   ]),
   async (req, res, next) => {
-    const main_image = req.files.main_image[0].location;
-    const additional_images = req.files.additional_images;
-    const additional_images_json = {
-      urls: [],
-    };
-    if (additional_images.length) {
+    const main_image =
+      req.files &&
+      Array.isArray(req.files.main_image) &&
+      req.files.main_image.length > 0
+        ? req.files.main_image[0].location
+        : undefined;
+    const additional_images = req.files["additional_images[]"];
+    const additional_images_json =
+      typeof req.product.additional_images === "string"
+        ? JSON.parse(req.product.additional_images)
+        : req.product.additional_images;
+    if (additional_images && additional_images.length) {
       for (let additional_image of additional_images) {
         additional_images_json.urls.push(additional_image.location);
       }
@@ -114,8 +131,15 @@ router.post(
       "additional_images_location",
       JSON.stringify(additional_images_json)
     );
+    if (main_image) {
+      req.product.main_image = main_image;
+    }
+    if (additional_images && additional_images.length) {
+      req.product.additional_images = JSON.stringify(additional_images_json);
+    }
+    await req.product.save();
 
-    return res.status(201);
+    return res.status(201).json("Upload successful");
   }
 );
 
@@ -179,23 +203,65 @@ router.put(
       description,
       stock_quantity,
       brand,
-      categories,
+      main_image_to_delete,
+      additional_images_to_delete,
     } = req.body;
+    console.log("THIS IS RUNNING");
+    console.log("ADDITIONAL TO DELETE ", additional_images_to_delete);
+    console.log(product_name);
+    let { categories } = req.body;
 
-    [product_name, price, description, stock_quantity].forEach((field) => {
-      if (field) {
-        req.product[field] = field;
+    const updates = { product_name, price, description, stock_quantity };
+    for (let key in updates) {
+      if (updates[key]) {
+        req.product[key] = updates[key];
       }
-    });
+    }
     if (brand) {
       let brand_obj = await Brand.findOne({ where: { name: brand } });
       if (!brand_obj) {
         brand_obj = await Brand.create({ name: brand });
-        req.product.brand_id = brand_obj.id;
+      }
+      req.product.brand_id = brand_obj.id;
+    }
+    // delete from s3 any unwanted images leftover
+    if (main_image_to_delete) {
+      const key = main_image_to_delete.split("/").slice(3).join("/");
+      deleteS3Obj(key);
+      req.product.main_image =
+        "https://pangaea-prime.s3.us-west-1.amazonaws.com/placeholder.jpg";
+      await req.product.save();
+    }
+    // messy
+    if (additional_images_to_delete && additional_images_to_delete.length > 0) {
+      for (let img of additional_images_to_delete) {
+        let prodImgs = req.product.additional_images;
+        if (typeof prodImgs === "string") {
+          console.log(prodImgs, "IS A STRING!");
+          console.log(prodImgs, "IS A STRING!");
+          console.log(prodImgs, "IS A STRING!");
+          console.log("PARSEDPRODIMGS", parsedProdImgs);
+          const parsedProdImgs = JSON.parse(prodImgs);
+          parsedProdImgs.urls = parsedProdImgs.urls.filter(
+            (url) => url !== img
+          );
+          console.log("PARSEDPRODIMGS", parsedProdImgs);
+          req.product.additional_images = JSON.stringify(parsedProdImgs);
+          await req.product.save();
+        } else {
+          const newProdImgs = structuredClone(prodImgs);
+          newProdImgs.urls = prodImgs.urls.filter((url) => url !== img);
+          req.product.additional_images = newProdImgs;
+          await req.product.save();
+        }
+        const key = img.split("/").slice(3).join("/");
+        deleteS3Obj(key);
       }
     }
     // TODO possible bug, updated category may not show up in first response
     if (categories) {
+      await req.product.setCategories([]);
+      categories = categories.map((cat) => cat.trim());
       for (let categoryName of categories) {
         let category = await Category.findOne({
           where: { name: categoryName },
@@ -205,7 +271,18 @@ router.put(
           category = await Category.create({ name: categoryName });
         }
 
-        await req.product.addCategory(category);
+        const existingRelation = await ProductCategory.findOne({
+          where: {
+            product_id: req.product.id,
+            category_id: category.id,
+          },
+        });
+        console.log("EXISTING RELATION", existingRelation);
+
+        if (!existingRelation) {
+          console.log("SDKLFJ THIS LINE IS RUNNING");
+          await req.product.addCategory(category);
+        }
       }
     }
     await req.product.save();

@@ -1,11 +1,12 @@
 import "../../styles/pages/sellPage.css";
 import { CreateProduct } from "../products/CreateProduct";
 
-export function SellPage() {
+// eslint-disable-next-line
+export function SellPage({ edit }) {
   return (
     <>
       <div className='sell__page'>
-        <CreateProduct />
+        <CreateProduct edit={edit} />
       </div>
     </>
   );

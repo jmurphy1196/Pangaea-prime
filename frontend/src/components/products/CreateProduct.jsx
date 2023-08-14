@@ -1,78 +1,346 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileUpload, faX } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 
 import "../../styles/components/createProduct.css";
+import {
+  thunkCreateSingleProduct,
+  thunkSetSingleProduct,
+  thunkUpdateSingleProduct,
+} from "../../store/singleProduct";
 
-export function CreateProduct() {
+// eslint-disable-next-line
+export function CreateProduct({ edit }) {
+  const { productId } = useParams();
+  const product = useSelector((state) => state.singleProduct);
   const mainImageUploadInput = useRef();
+  const additionalImageUploadInput = useRef();
   const [productName, setProductName] = useState("");
   const [brandName, setBrandName] = useState("");
   const [categories, setCategories] = useState("");
   const [stockQuantity, setStockQuantity] = useState(null);
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
   const [mainImage, setMainImage] = useState(null);
+  const [mainImageDelete, setMainImageDelete] = useState();
+  const [additionalImagesDelete, setAdditionalImagesDelete] = useState([]);
+  const [additionalImages, setAdditionalImages] = useState([]);
+  const [formTouched, setFormTouched] = useState({
+    productName: false,
+    brandName: false,
+    categories: false,
+    stockQuantity: false,
+    price: false,
+    description: false,
+    submit: false,
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const dispatch = useDispatch();
+  const history = useHistory();
+  useEffect(() => {
+    const errors = {};
+    //TODO this is messy, think about cleaning this up
+    if (productName.length < 3 || productName.length > 100)
+      errors.productName = "Product name must be between 3 and 100 characters";
+    if (brandName.length < 1 || brandName.length > 20)
+      errors.brandName = "Brand name must be between 1 and 20 characters";
+    if (
+      categories.split(", ").filter((cat) => cat !== "").length < 1 ||
+      categories.split(", ").length > 50
+    )
+      errors.categories = "You may select between 1 and 50 categories";
+    if (stockQuantity < 1 || stockQuantity > 999999)
+      errors.stockQuantity = "Stock quantity must be between 1 and 999,999";
+    if (price < 0 || price > 999999 || price === null || price === undefined)
+      errors.price = "Price must be between 0 and $999,999";
+    if (description.length < 10 || description.length > 300)
+      errors.description = "Description must be between 10 and 300 characters";
+    setFormErrors(errors);
+  }, [
+    productName,
+    brandName,
+    categories,
+    stockQuantity,
+    price,
+    mainImage,
+    additionalImages,
+    description,
+  ]);
+  useEffect(() => {
+    (async () => {
+      if (productId) {
+        await dispatch(thunkSetSingleProduct(productId));
+      }
+    })();
+  }, [dispatch, productId]);
+  useEffect(() => {
+    if (product && edit) {
+      setProductName(product.product_name);
+      setBrandName(product.Brand.name);
+      setCategories(product.Categories.map((cat) => cat.name).join(", "));
+      setDescription(product.description);
+      setStockQuantity(product.stockQuantity);
+      setPrice(product.price);
+      setMainImage(product.main_image);
+      if (product.additional_images) {
+        if (typeof product.additional_images === "string") {
+          const parsedImages = JSON.parse(product.additional_images);
+          setAdditionalImages([...parsedImages.urls]);
+        } else {
+          setAdditionalImages([...product.additional_images.urls]);
+        }
+      }
+    }
+  }, [product, edit]);
+  console.log("ADDITIONAL IMAGES TO DELETE", additionalImagesDelete);
+  const handleSubmit = async (e) => {
+    console.log("HANDLE SUBMIT IS RUNNING!!");
+    console.log("HANDLE SUBMIT IS RUNNING!!");
+    e.preventDefault();
+    setFormTouched({
+      price: true,
+      productName: true,
+      brandName: true,
+      categories: true,
+      stockQuantity: true,
+      description: true,
+      submit: true,
+    });
+    if (!Object.values(formErrors).length) {
+      if (!edit) {
+        const imageData = new FormData();
+        imageData.append("main_image", mainImage);
+        for (let additionalImage of additionalImages) {
+          imageData.append("additional_images[]", additionalImage);
+        }
+        const res = await dispatch(
+          thunkCreateSingleProduct(
+            {
+              product_name: productName,
+              brand: brandName,
+              price,
+              description,
+              stock_quantity: stockQuantity,
+              categories: categories.split(","),
+            },
+            imageData
+          )
+        );
+        console.log("THIS IS THE RES IN COMPONENET", res);
+        if (res.id) {
+          history.push(`/product/${res.id}`);
+        }
+      } else {
+        //edit product
+        // console.log("edited data", {
+        //   productName,
+        //   brandName,
+        //   categories,
+        //   description,
+        //   stockQuantity,
+        //   price,
+        //   mainImageDelete,
+        //   additionalImagesDelete,
+        //   additionalImages,
+        // });
+        const imageData = new FormData();
+        if (typeof mainImage !== "string")
+          imageData.append("main_image", mainImage);
+        for (let img of additionalImages) {
+          if (typeof img !== "string")
+            imageData.append("additional_images[]", img);
+        }
+        const res = await dispatch(
+          thunkUpdateSingleProduct(
+            product.id,
+            {
+              product_name: productName,
+              brand: brandName,
+              price,
+              description,
+              stock_quantity: stockQuantity,
+              categories: categories.split(","),
+              main_image_to_delete: mainImageDelete,
+              additional_images_to_delete: additionalImagesDelete,
+            },
+            imageData
+          )
+        );
+        console.log("THIS IS THE RES, in the component", res);
+        history.push(`/product/${res.id}`);
+      }
+    }
+  };
   return (
     <>
-      <form className='product__create__form'>
+      <form className='product__create__form' onSubmit={handleSubmit}>
         <h1>Start selling with Pangaea!</h1>
+        {formTouched.submit && (
+          <div className='product__create__form__group'>
+            <ul>
+              {Object.values(formErrors).map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className='product__create__form__group'>
           <input
+            className={`${
+              formTouched.productName && formErrors.productName && "errors"
+            }`}
             type='text'
             placeholder=' '
-            onChange={(e) => setProductName(e.target.value)}
+            value={productName}
+            onChange={(e) => {
+              setFormTouched({ ...formTouched, productName: true });
+              setProductName(e.target.value);
+            }}
           />
-          <label className={`${productName !== "" && "filled"}`}>
+          <label
+            className={`${productName !== "" && "filled"} ${
+              formTouched.productName && formErrors.productName && "errors"
+            }`}
+          >
             Product name
           </label>
           <div className='product__create__form__group'>
             <input
+              className={`${
+                formTouched.brandName && formErrors.brandName && "errors"
+              }`}
               type='text'
               placeholder=' '
-              onChange={(e) => setBrandName(e.target.value)}
+              value={brandName}
+              onChange={(e) => {
+                setFormTouched({ ...formTouched, brandName: true });
+                setBrandName(e.target.value);
+              }}
             />
-            <label className={`${brandName !== "" && "filled"}`}>
+            <label
+              className={`${brandName !== "" && "filled"} ${
+                formTouched.brandName && formErrors.brandName && "errors"
+              }`}
+            >
               Brand name
             </label>
           </div>
         </div>
         <div className='product__create__form__group'>
           <input
+            className={`${
+              formTouched.categories && formErrors.categories && "errors"
+            }`}
             type='text'
             placeholder=' '
-            onChange={(e) => setCategories(e.target.value)}
+            value={categories}
+            onChange={(e) => {
+              setFormTouched({ ...formTouched, categories: true });
+              setCategories(e.target.value);
+            }}
           />
-          <label className={`${categories !== "" && "filled"}`}>
+          <label
+            className={`${categories !== "" && "filled"} ${
+              formTouched.categories && formErrors.categories && "errors"
+            }`}
+          >
             categories ( , )
           </label>
         </div>
+        {categories.length > 0 && (
+          <div className='product__create__form__group'>
+            {[...new Set(categories.split(",").map((word) => word.trim()))].map(
+              (category, i) => {
+                if (category.trim() !== "")
+                  return (
+                    <span key={i} className='product__create__form__category'>
+                      <FontAwesomeIcon
+                        className='category-close'
+                        icon={faX}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCategories((prev) =>
+                            prev.replace(new RegExp(`${category}`, "g"), "")
+                          );
+                        }}
+                      />
+                      {category}
+                    </span>
+                  );
+              }
+            )}
+          </div>
+        )}
+        <div className='product__create__form__group'>
+          <textarea
+            name='description'
+            id=''
+            cols='30'
+            rows='10'
+            placeholder='Description...'
+            className={`${
+              formErrors.description && formTouched.description && "errors"
+            }`}
+            value={description}
+            onChange={(e) => {
+              setFormTouched({ ...formTouched, description: true });
+              setDescription(e.target.value);
+            }}
+          ></textarea>
+        </div>
         <div className='product__create__form__group'>
           <input
+            className={`${
+              formTouched.stockQuantity && formErrors.stockQuantity && "errors"
+            }`}
             type='number'
             placeholder=' '
             min={0}
             step={1}
-            onChange={(e) => setStockQuantity(e.target.value)}
+            value={stockQuantity}
+            onChange={(e) => {
+              setFormTouched({ ...formTouched, stockQuantity: true });
+              setStockQuantity(e.target.value);
+            }}
           />
-          <label className={`${stockQuantity !== null && "filled"}`}>
+          <label
+            className={`${stockQuantity !== null && "filled"} ${
+              formTouched.stockQuantity && formErrors.stockQuantity && "errors"
+            }`}
+          >
             Stock Quantity
           </label>
           <div className='product__create__form__group'>
             <input
+              className={`${formTouched.price && formErrors.price && "errors"}`}
               type='number'
               placeholder=' '
               min={0}
               max={999999}
-              onChange={(e) => setPrice(e.target.value)}
+              value={price}
+              step={"0.01"}
+              onChange={(e) => {
+                setFormTouched({ ...formTouched, price: true });
+                setPrice(+e.target.value);
+              }}
             />
-            <label className={`${price !== null && "filled"}`}>Price</label>
+            <label
+              className={`${price !== null && "filled"} ${
+                formTouched.price && formErrors.price && "errors"
+              }`}
+            >
+              Price
+            </label>
           </div>
         </div>
         <div className='product__create__form__group f-center'>
           {!mainImage ? (
             <div
               className='product__create__form__main-image'
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 if (mainImageUploadInput.current)
                   mainImageUploadInput.current.click();
               }}
@@ -95,16 +363,95 @@ export function CreateProduct() {
             </div>
           ) : (
             <div className='product__create__form__main-image__uploaded'>
-              <img src={URL.createObjectURL(mainImage)} alt='' />
+              <img
+                src={
+                  typeof mainImage === "string"
+                    ? mainImage
+                    : URL.createObjectURL(mainImage)
+                }
+                alt=''
+              />
               <button
                 className='product__create__form__main-image__close'
-                onClick={() => setMainImage(null)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (typeof mainImage === "string") {
+                    // delete
+                    setMainImageDelete(mainImage);
+                  }
+                  setMainImage(null);
+                }}
               >
                 <FontAwesomeIcon icon={faX} />
               </button>
             </div>
           )}
         </div>
+        <div className='product__create__form__group f-center'>
+          {additionalImages.map((img, i) => {
+            return (
+              <div
+                key={i}
+                className='product__create__form__additional-image__uploaded'
+              >
+                <button
+                  className='product__create__form__additional-image__close'
+                  type='button'
+                  onClick={(e) => {
+                    console.log("YOU CLICKED THE CLOSE BUTTON!!!");
+                    e.stopPropagation();
+                    if (typeof img === "string") {
+                      setAdditionalImagesDelete((prev) => [...prev, img]);
+                    }
+                    setAdditionalImages((prev) =>
+                      prev.filter((val, idx) => idx !== i)
+                    );
+                  }}
+                >
+                  <FontAwesomeIcon icon={faX} />
+                </button>
+                <img
+                  src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                  alt=''
+                />
+              </div>
+            );
+          })}
+          <div
+            className='product__create__form__additional-image'
+            onClick={(e) => {
+              e.stopPropagation();
+              if (additionalImageUploadInput.current) {
+                additionalImageUploadInput.current.click();
+              }
+            }}
+          >
+            <h3>Additional Image</h3>
+            <FontAwesomeIcon icon={faFileUpload} fontSize={30} />
+            <input
+              type='file'
+              className='hidden'
+              ref={additionalImageUploadInput}
+              onChange={(e) => {
+                if (additionalImages.length < 5) {
+                  if (e.target.files[0]) {
+                    const file = e.target.files[0];
+                    if (file.type.substring("image/")) {
+                      setAdditionalImages((prev) => [...prev, file]);
+                    }
+                  }
+                }
+              }}
+            />
+          </div>
+        </div>
+        <button
+          disabled={Object.values(formErrors).length > 0 && formTouched.submit}
+          type='submit'
+          className='product__create__form-submit'
+        >
+          Create
+        </button>
       </form>
     </>
   );

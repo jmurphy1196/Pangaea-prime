@@ -16,7 +16,9 @@ export function Product({ productId }) {
           <img src={product.main_image} alt='' />
         </div>
         <div className='product__information'>
-          <h1 className='product__name'>{product.product_name}</h1>
+          <Link to={`/product/${product.id}`}>
+            <h1 className='product__name'>{product.product_name}</h1>
+          </Link>
           <Link to='/products' className='product__brand'>
             {product.Brand.name}
           </Link>

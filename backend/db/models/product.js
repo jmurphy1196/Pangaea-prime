@@ -1,5 +1,9 @@
 "use strict";
 const { Model } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
+const SCHEMA =
+  process.env.NODE_ENV === "production" ? `${process.env.SCHEMA}.` : "";
+
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -99,6 +103,42 @@ module.exports = (sequelize, DataTypes) => {
             model: sequelize.models.Brand,
           },
         ],
+      },
+      scopes: {
+        ratings: {
+          include: [
+            {
+              model: sequelize.models.Category,
+              as: "Categories",
+              through: {
+                attributes: [],
+              },
+            },
+            {
+              model: sequelize.models.Brand,
+            },
+          ],
+          attributes: {
+            include: [
+              [
+                Sequelize.literal(`(
+            SELECT AVG(rating)
+            FROM ${SCHEMA}"Ratings"
+            WHERE ${SCHEMA}"Ratings"."product_id" = "Product"."id"
+          )`),
+                "avgRating",
+              ],
+              [
+                Sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM ${SCHEMA}"Ratings"
+            WHERE ${SCHEMA}"Ratings"."product_id" = "Product"."id"
+          )`),
+                "numRatings",
+              ],
+            ],
+          },
+        },
       },
     }
   );

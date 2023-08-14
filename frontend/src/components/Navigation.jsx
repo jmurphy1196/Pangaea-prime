@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useHistory } from "react-router-dom";
 import {
@@ -8,9 +8,14 @@ import {
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/components/navbar.css";
+import { thunkGetCategories } from "../store/categories";
 
 export function Navigation() {
   const user = useSelector((state) => state.session.user);
+  const dispatch = useDispatch();
+  const categories = useSelector(
+    (state) => state.categories.orderedCategories || []
+  );
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState({
     lat: null,
@@ -37,7 +42,11 @@ export function Navigation() {
         }));
       }
     );
-  }, []);
+    (async () => {
+      const res = await dispatch(thunkGetCategories());
+      console.log("this is res", res);
+    })();
+  }, [dispatch]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -115,14 +124,14 @@ export function Navigation() {
           </button>
         </div> */}
         <div className='sublinks'>
-          <Link>Electronics</Link>
-          <Link>Books</Link>
-          <Link>Music</Link>
-          <Link>Registry</Link>
-          <Link>Games</Link>
-          <Link>Fashion</Link>
-          <Link>Medical</Link>
-          <Link>Automotive</Link>
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              to={`/products?categories=${category.name}`}
+            >
+              {category.name}
+            </Link>
+          ))}
           <Link to='/sell'>Sell</Link>
         </div>
       </nav>

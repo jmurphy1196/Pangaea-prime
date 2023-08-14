@@ -3,10 +3,14 @@ import thunk from "redux-thunk";
 import session from "./session";
 import logger from "redux-logger";
 import { productsReducer } from "./products";
+import { singleProductReducer } from "./singleProduct";
+import { categoriesReducer } from "./categories";
 
 const rootReducer = combineReducers({
   session,
   products: productsReducer,
+  singleProduct: singleProductReducer,
+  categories: categoriesReducer,
 });
 
 let enhancer;

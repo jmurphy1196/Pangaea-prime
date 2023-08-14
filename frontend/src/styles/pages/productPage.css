@@ -1,0 +1,17 @@
+.product__page {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+
+}
+
+.products__page__image-container {
+    display: flex;
+    width: 30%;
+}
+
+.product__page__details-container {
+    width: 50%;
+    padding: 20px;
+}

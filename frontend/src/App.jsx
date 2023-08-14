@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { MyAccount } from "./components/account/MyAccount";
 import { ProductsPage } from "./components/pages/ProductsPage";
 import { SellPage } from "./components/pages/SellPage";
+import { ProductPage } from "./components/pages/ProductPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,9 +38,15 @@ function App() {
         <Route path='/products'>
           <ProductsPage />
         </Route>
+        <Route exact path='/product/:productId'>
+          <ProductPage />
+        </Route>
         <ProtectedRoute exact path='/sell'>
           <SellPage />
         </ProtectedRoute>
+        <Route exact path='/product/:productId/edit'>
+          <SellPage edit />
+        </Route>
         <ProtectedRoute exact path='/account'>
           <MyAccount />
         </ProtectedRoute>

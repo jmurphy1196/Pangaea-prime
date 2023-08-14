@@ -2,7 +2,7 @@
     border: 1px solid var(--light);
     display: flex;
     margin-top: 20px;
-    width: 600px;
+    width: 660px;
     padding: 10px 30px;
     flex-direction: column;
     gap: 50px;
@@ -82,7 +82,93 @@
 }
 .f-center {
     justify-content: center;
+    flex-wrap: wrap;
 }
 .hidden {
     display: none;
+}
+.product__create__form__additional-image {
+    height: 200px;
+    border: 4px dotted var(--secondary);
+    border-radius: 15px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary);
+    flex-direction: column;
+    gap: 30px;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+.product__create__form__additional-image:hover {
+    background-color: var(--secondary);
+    color: white;
+
+}
+
+.product__create__form__additional-image__uploaded {
+    border: 1px solid var(--light);
+    position: relative;
+    width: 200px;
+    height: 200px;
+
+}
+.product__create__form__additional-image__close{
+    position: absolute;
+    bottom: 80%;
+    left: 89%;
+    padding: 5px 5px;
+    border-radius: 500px;
+    border: 1px solid red;
+    color: white;
+    font-size: 1rem;
+    background-color: red; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+span.product__create__form__category {
+    border: 2px solid var(--light);
+    padding: 2px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.category-close {
+    font-size: .8rem;
+}
+.product__create__form-submit {
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--primary);
+    color: white;
+}
+
+/* errors */
+label.errors {
+    color: red !important
+}
+
+.product__create__form input.errors {
+    border-bottom: 1px solid red;
+}
+.product__create__form button:disabled{
+    cursor: not-allowed;
+    filter: brightness(75%);
+}
+
+.product__create__form__group ul {
+    font-size: .8rem;
+    color: red;
+}
+.product__create__form__group textarea {
+    resize: none;
+    width: 100%;
+}
+.product__create__form__group textarea.errors {
+    border: 1px solid red;
 }
