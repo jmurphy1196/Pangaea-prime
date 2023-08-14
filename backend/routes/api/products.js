@@ -291,4 +291,14 @@ router.put(
   }
 );
 
+router.delete(
+  "/:productId",
+  checkProductExists,
+  checkUserCanEditProduct,
+  async (req, res, next) => {
+    await req.product.destroy();
+    return res.status(200).json("product deleted");
+  }
+);
+
 module.exports = router;

@@ -10,6 +10,13 @@ const setSingleProduct = (product) => ({
   },
 });
 
+const deleteSingleProduct = (productId) => ({
+  type: actionTypes.DELETE_PRODUCT,
+  payload: {
+    productId,
+  },
+});
+
 export const thunkSetSingleProduct = (productId) => async (dispatch) => {
   try {
     const res = await csrfFetch(`/api/products/${productId}`);
@@ -18,6 +25,21 @@ export const thunkSetSingleProduct = (productId) => async (dispatch) => {
     dispatch(setSingleProduct(data));
   } catch (err) {
     console.log("there was an error", err);
+    if (err.json) return await err.json();
+    return err;
+  }
+};
+
+export const thunkDeleteSingleProduct = (productId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/products/${productId}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    dispatch(deleteSingleProduct(productId));
+    return data;
+  } catch (err) {
+    console.log("there was an err", err);
     if (err.json) return await err.json();
     return err;
   }
@@ -97,6 +119,9 @@ export const singleProductReducer = (state = initalState, action) => {
       const { product } = action.payload;
       const newState = { ...product };
       return newState;
+    }
+    case actionTypes.DELETE_PRODUCT: {
+      return initalState;
     }
     case actionTypes.CLEAR_PRODUCT: {
       return initalState;

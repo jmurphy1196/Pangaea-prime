@@ -147,6 +147,13 @@ span.product__create__form__category {
     background-color: var(--primary);
     color: white;
 }
+.product__create__form-delete {
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: red;
+    color: white;
+}
 
 /* errors */
 label.errors {

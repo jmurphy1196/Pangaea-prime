@@ -25,6 +25,7 @@ module.exports = {
             key: "id",
           },
           allowNull: false,
+          onDelete: "CASCADE",
         },
         category_id: {
           type: Sequelize.INTEGER,
@@ -33,6 +34,7 @@ module.exports = {
             key: "id",
           },
           allowNull: false,
+          onDelete: "CASCADE",
         },
         createdAt: {
           allowNull: false,

@@ -62,6 +62,20 @@ export const productsReducer = (state = initialState, action) => {
       const newState = initialState;
       return newState;
     }
+    case actionTypes.DELETE_PRODUCT: {
+      const newState = structuredClone(state);
+      const { productId } = action.payload;
+      const existingId = newState.orderedProductIds.find(
+        (id) => id == productId
+      );
+      if (existingId) {
+        newState.orderedProductIds = newState.orderedProductIds.filter(
+          (id) => id != productId
+        );
+        delete newState[productId];
+      }
+      return newState;
+    }
     default:
       return state;
   }

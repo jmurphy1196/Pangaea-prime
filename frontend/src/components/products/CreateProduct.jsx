@@ -7,6 +7,7 @@ import { useHistory, useParams } from "react-router-dom";
 import "../../styles/components/createProduct.css";
 import {
   thunkCreateSingleProduct,
+  thunkDeleteSingleProduct,
   thunkSetSingleProduct,
   thunkUpdateSingleProduct,
 } from "../../store/singleProduct";
@@ -94,7 +95,14 @@ export function CreateProduct({ edit }) {
       }
     }
   }, [product, edit]);
-  console.log("ADDITIONAL IMAGES TO DELETE", additionalImagesDelete);
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const res = await dispatch(thunkDeleteSingleProduct(product.id));
+    if (res) history.push("/");
+  };
+
   const handleSubmit = async (e) => {
     console.log("HANDLE SUBMIT IS RUNNING!!");
     console.log("HANDLE SUBMIT IS RUNNING!!");
@@ -450,8 +458,21 @@ export function CreateProduct({ edit }) {
           type='submit'
           className='product__create__form-submit'
         >
-          Create
+          {edit ? "Edit" : "Create"}
         </button>
+        {edit && (
+          <button
+            disabled={
+              Object.values(formErrors).length > 0 && formTouched.submit
+            }
+            type='button'
+            className='product__create__form-delete'
+            onClick={handleDelete}
+          >
+            {" "}
+            Delete{" "}
+          </button>
+        )}
       </form>
     </>
   );

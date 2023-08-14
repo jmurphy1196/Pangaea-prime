@@ -16,10 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       Product.belongsToMany(models.Category, {
         through: "ProductCategories",
         foreignKey: "product_id",
+        onDelete: "CASCADE",
       });
       Product.hasMany(models.Rating, {
         foreignKey: "product_id",
         as: "ratings",
+        onDelete: "CASCADE",
       });
       Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
     }

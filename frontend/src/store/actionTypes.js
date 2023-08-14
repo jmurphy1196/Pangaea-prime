@@ -7,6 +7,7 @@ const CLEAR_PRODUCT = "singleProduct/clearProductData";
 const GET_CATEGORIES = "categories/getCategoriesData";
 const CREATE_PRODUCT = "singleProduct/createProduct";
 const UPDATE_PRODUCT = "singleProduct/updateProduct";
+const DELETE_PRODUCT = "singleProduct/deleteProduct";
 
 export const actionTypes = {
   SET_SESSION,
@@ -18,4 +19,5 @@ export const actionTypes = {
   GET_CATEGORIES,
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
+  DELETE_PRODUCT,
 };
