@@ -227,7 +227,9 @@ router.put(
     // delete from s3 any unwanted images leftover
     if (main_image_to_delete) {
       const key = main_image_to_delete.split("/").slice(3).join("/");
-      deleteS3Obj(key);
+      if (key !== "placeholder.jpg") {
+        deleteS3Obj(key);
+      }
       req.product.main_image =
         "https://pangaea-prime.s3.us-west-1.amazonaws.com/placeholder.jpg";
       await req.product.save();
@@ -240,7 +242,6 @@ router.put(
           console.log(prodImgs, "IS A STRING!");
           console.log(prodImgs, "IS A STRING!");
           console.log(prodImgs, "IS A STRING!");
-          console.log("PARSEDPRODIMGS", parsedProdImgs);
           const parsedProdImgs = JSON.parse(prodImgs);
           parsedProdImgs.urls = parsedProdImgs.urls.filter(
             (url) => url !== img

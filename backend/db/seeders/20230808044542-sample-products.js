@@ -18,14 +18,6 @@ module.exports = {
             price: 190.99,
             seller_id: 1,
             stock_quantity: 100,
-            main_image:
-              "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-1.png",
-            additional_images: JSON.stringify({
-              urls: [
-                "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-2.png",
-                "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-3.png",
-              ],
-            }),
             brand_id: 1,
           },
           {
@@ -34,14 +26,6 @@ module.exports = {
             price: 29.99,
             seller_id: 1,
             stock_quantity: 50,
-            main_image:
-              "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-1.png",
-            additional_images: JSON.stringify({
-              urls: [
-                "https://example.com/sample-product-1-additional1.jpg",
-                "https://example.com/sample-product-1-additional2.jpg",
-              ],
-            }),
             brand_id: 1,
           },
           {
@@ -50,14 +34,6 @@ module.exports = {
             price: 29.99,
             seller_id: 1,
             stock_quantity: 50,
-            main_image:
-              "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-1.png",
-            additional_images: JSON.stringify({
-              urls: [
-                "https://example.com/sample-product-1-additional1.jpg",
-                "https://example.com/sample-product-1-additional2.jpg",
-              ],
-            }),
             brand_id: 1,
           },
           {
@@ -66,14 +42,6 @@ module.exports = {
             price: 39.99,
             seller_id: 1,
             stock_quantity: 50,
-            main_image:
-              "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-1.png",
-            additional_images: JSON.stringify({
-              urls: [
-                "https://example.com/sample-product-1-additional1.jpg",
-                "https://example.com/sample-product-1-additional2.jpg",
-              ],
-            }),
             brand_id: 1,
           },
           {
@@ -82,14 +50,6 @@ module.exports = {
             price: 9.0,
             seller_id: 1,
             stock_quantity: 50,
-            main_image:
-              "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-1.png",
-            additional_images: JSON.stringify({
-              urls: [
-                "https://example.com/sample-product-1-additional1.jpg",
-                "https://example.com/sample-product-1-additional2.jpg",
-              ],
-            }),
             brand_id: 1,
           },
           {
@@ -98,14 +58,6 @@ module.exports = {
             price: 9.0,
             seller_id: 1,
             stock_quantity: 50,
-            main_image:
-              "https://pangaea-prime.s3.us-west-1.amazonaws.com/products/phone-1.png",
-            additional_images: JSON.stringify({
-              urls: [
-                "https://example.com/sample-product-1-additional1.jpg",
-                "https://example.com/sample-product-1-additional2.jpg",
-              ],
-            }),
             brand_id: 1,
           },
         ],
