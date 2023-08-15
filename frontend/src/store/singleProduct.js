@@ -17,6 +17,54 @@ const deleteSingleProduct = (productId) => ({
   },
 });
 
+const addReviewData = (reviews, userReview) => ({
+  type: actionTypes.GET_PRODUCT_REVIEWS,
+  payload: {
+    reviews,
+    userReview,
+  },
+});
+
+const editReviewData = (review) => ({
+  type: actionTypes.EDIT_PRODUCT_REVIEW,
+  payload: {
+    review,
+  },
+});
+
+export const thunkEditProductReview =
+  (reviewId, reviewData) => async (dispatch) => {
+    try {
+      const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: "PUT",
+        body: reviewData,
+      });
+      const data = await res.json();
+      dispatch(editReviewData(data));
+      return data;
+    } catch (err) {
+      if (err.json) return err.json();
+      return err;
+    }
+  };
+
+export const thunkCreateReview =
+  (productId, reviewData) => async (dispatch) => {
+    try {
+      const res = await csrfFetch(`/api/products/${productId}/reviews`, {
+        method: "POST",
+        body: reviewData,
+      });
+      const data = await res.json();
+      console.log("THIS IS THE DATA", data);
+      dispatch(addReviewData([data], data));
+      return data;
+    } catch (err) {
+      if (err.json) return await err.json();
+      return err;
+    }
+  };
+
 export const thunkSetSingleProduct = (productId) => async (dispatch) => {
   try {
     const res = await csrfFetch(`/api/products/${productId}`);
@@ -25,6 +73,20 @@ export const thunkSetSingleProduct = (productId) => async (dispatch) => {
     dispatch(setSingleProduct(data));
   } catch (err) {
     console.log("there was an error", err);
+    if (err.json) return await err.json();
+    return err;
+  }
+};
+
+export const thunkGetReviewData = (productId) => async (dispatch) => {
+  try {
+    console.log("Getting review data...");
+    const res = await csrfFetch(`/api/products/${productId}/reviews`);
+    const data = await res.json();
+    dispatch(addReviewData(data.reviews, data.userReview));
+    return data;
+  } catch (err) {
+    console.log("there was an err", err);
     if (err.json) return await err.json();
     return err;
   }
@@ -117,7 +179,8 @@ export const singleProductReducer = (state = initalState, action) => {
   switch (action.type) {
     case actionTypes.SET_PRODUCT: {
       const { product } = action.payload;
-      const newState = { ...product };
+
+      const newState = structuredClone({ ...state, ...product });
       return newState;
     }
     case actionTypes.DELETE_PRODUCT: {
@@ -125,6 +188,26 @@ export const singleProductReducer = (state = initalState, action) => {
     }
     case actionTypes.CLEAR_PRODUCT: {
       return initalState;
+    }
+    case actionTypes.GET_PRODUCT_REVIEWS: {
+      const { reviews, userReview } = action.payload;
+      const newState = structuredClone(state);
+      newState.reviews = reviews;
+      newState.userReview = userReview;
+      return newState;
+    }
+    case actionTypes.EDIT_PRODUCT_REVIEW: {
+      const { review } = action.payload;
+      const newState = structuredClone(state);
+      newState.reviews.userReview = review;
+
+      let existingReviewIdx = newState.reviews.findIndex(
+        (rev) => rev.id == review.id
+      );
+      if (existingReviewIdx !== -1) {
+        newState.reviews[existingReviewIdx] = review;
+      }
+      return newState;
     }
     default:
       return state;

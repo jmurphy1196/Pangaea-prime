@@ -8,6 +8,9 @@ const GET_CATEGORIES = "categories/getCategoriesData";
 const CREATE_PRODUCT = "singleProduct/createProduct";
 const UPDATE_PRODUCT = "singleProduct/updateProduct";
 const DELETE_PRODUCT = "singleProduct/deleteProduct";
+const GET_PRODUCT_REVIEWS = "singleProduct/getReviewData";
+const CREATE_PRODUCT_REVIEW = "singleProduct/createReview";
+const EDIT_PRODUCT_REVIEW = "singleProduct/editProductReview";
 
 export const actionTypes = {
   SET_SESSION,
@@ -20,4 +23,7 @@ export const actionTypes = {
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
   DELETE_PRODUCT,
+  GET_PRODUCT_REVIEWS,
+  CREATE_PRODUCT_REVIEW,
+  EDIT_PRODUCT_REVIEW,
 };

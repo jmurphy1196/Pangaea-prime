@@ -5,6 +5,7 @@ const {
   Category,
   Rating,
   ProductCategory,
+  User,
 } = require("../../db/models");
 const { Op, Sequelize } = require("sequelize");
 const {
@@ -19,6 +20,7 @@ const {
   checkProductFields,
   checkProductExists,
   checkUserCanEditProduct,
+  checkReviewFields,
 } = require("../../middleware");
 const multer = require("multer");
 const { checkProductUpdateFields } = require("../../middleware/product");
@@ -298,6 +300,68 @@ router.delete(
   async (req, res, next) => {
     await req.product.destroy();
     return res.status(200).json("product deleted");
+  }
+);
+
+// get all product reviews
+router.get(
+  "/:productId/reviews",
+  checkProductExists,
+  async (req, res, next) => {
+    const userReview = await req.product.getRatings({
+      where: {
+        user_id: req.user.id,
+        product_id: req.product.id,
+      },
+    });
+    const productReviews = await req.product.getRatings({
+      include: [
+        {
+          model: User,
+          as: "user",
+        },
+      ],
+    });
+    res.status(200).json({
+      reviews: productReviews,
+      userReview: userReview.length ? userReview[0] : null,
+    });
+  }
+);
+
+router.post(
+  "/:productId/reviews",
+  requireUser,
+  checkProductExists,
+  checkReviewFields,
+  async (req, res, next) => {
+    const existingReview = await Rating.findOne({
+      where: {
+        user_id: req.user.id,
+        product_id: req.product.id,
+      },
+    });
+    if (existingReview)
+      return next(
+        new BadReqestError("A review already exists for you", {
+          review: "Review already exists",
+        })
+      );
+    const { review, rating } = req.body;
+    const newRating = await req.user.createRating({
+      rating,
+      review,
+      product_id: req.product.id,
+    });
+    const newRatingWithUser = await Rating.findByPk(newRating.id, {
+      include: [
+        {
+          model: User,
+          as: "user",
+        },
+      ],
+    });
+    return res.status(201).json(newRatingWithUser);
   }
 );
 

@@ -5,6 +5,7 @@ import "../../styles/pages/productPage.css";
 import { thunkSetSingleProduct } from "../../store/singleProduct";
 import { ProductImages } from "../products/ProductPage/ProductImages";
 import { ProductDetails } from "../products/ProductPage/ProductDetails";
+import { ProductReviews } from "../reviews/ProductReviews";
 
 export function ProductPage() {
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ export function ProductPage() {
         </div>
         <div className='product__page__details-container'>
           <ProductDetails />
+        </div>
+        <div className='product__page__reviews-container'>
+          <ProductReviews productId={productId} />
         </div>
       </div>
     </>

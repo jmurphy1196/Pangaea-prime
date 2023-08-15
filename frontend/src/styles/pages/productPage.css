@@ -3,6 +3,7 @@
     width: 100%;
     justify-content: center;
     margin-top: 10px;
+    flex-wrap: wrap;
 
 }
 
@@ -14,4 +15,11 @@
 .product__page__details-container {
     width: 50%;
     padding: 20px;
+}
+.product__page__reviews-container {
+    width: 100%;
+    padding: 20px 18%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

@@ -104,8 +104,6 @@ export function CreateProduct({ edit }) {
   };
 
   const handleSubmit = async (e) => {
-    console.log("HANDLE SUBMIT IS RUNNING!!");
-    console.log("HANDLE SUBMIT IS RUNNING!!");
     e.preventDefault();
     setFormTouched({
       price: true,
@@ -136,23 +134,10 @@ export function CreateProduct({ edit }) {
             imageData
           )
         );
-        console.log("THIS IS THE RES IN COMPONENET", res);
         if (res.id) {
           history.push(`/product/${res.id}`);
         }
       } else {
-        //edit product
-        // console.log("edited data", {
-        //   productName,
-        //   brandName,
-        //   categories,
-        //   description,
-        //   stockQuantity,
-        //   price,
-        //   mainImageDelete,
-        //   additionalImagesDelete,
-        //   additionalImages,
-        // });
         const imageData = new FormData();
         if (typeof mainImage !== "string")
           imageData.append("main_image", mainImage);

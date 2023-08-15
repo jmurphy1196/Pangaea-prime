@@ -1,0 +1,40 @@
+.edit-review__modal {
+    display: flex;
+    flex-direction: column;
+    color: black; 
+}
+
+.edit-review__modal h2 {
+    color: black;
+    font-size: 1.8rem;
+}
+.edit-review__modal header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--light);
+}
+.edit-review__modal textarea {
+    resize: none;
+    width: 100%;
+}
+.edit-review__actions {
+    display: flex;
+    justify-content: center;
+}
+.edit-review__actions button {
+    background-color: var(--primary);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 25px;
+    width :100%;
+}
+.edit-review__stars {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    color: var(--primary);
+    gap: 1px;
+}

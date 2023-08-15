@@ -6,6 +6,11 @@ const {
   checkUserCanEditProduct,
 } = require("./product");
 const { checkBrandExists } = require("./brand");
+const {
+  checkReviewExists,
+  checkReviewFields,
+  checkUserCanEditReview,
+} = require("./review");
 
 module.exports = {
   validateLogin,
@@ -14,4 +19,7 @@ module.exports = {
   checkProductExists,
   checkUserCanEditProduct,
   checkBrandExists,
+  checkReviewExists,
+  checkReviewFields,
+  checkUserCanEditReview,
 };
