@@ -3,6 +3,10 @@ import { csrfFetch } from "./csrf";
 
 const initalState = null;
 
+export const clearSingleProduct = () => ({
+  type: actionTypes.CLEAR_PRODUCT,
+});
+
 const setSingleProduct = (product) => ({
   type: actionTypes.SET_PRODUCT,
   payload: {
@@ -32,6 +36,33 @@ const editReviewData = (review) => ({
   },
 });
 
+const deleteReviewData = (reviewId) => ({
+  type: actionTypes.DELETE_PRODUCT_REVIEW,
+  payload: {
+    reviewId,
+  },
+});
+
+const createReviewData = (review) => ({
+  type: actionTypes.CREATE_PRODUCT_REVIEW,
+  payload: {
+    review,
+  },
+});
+
+export const thunkDeleteProductReview = (reviewId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+      method: "DELETE",
+    });
+    dispatch(deleteReviewData(reviewId));
+    const data = await res.json();
+  } catch (err) {
+    if (err.json) return await err.json();
+    return err;
+  }
+};
+
 export const thunkEditProductReview =
   (reviewId, reviewData) => async (dispatch) => {
     try {
@@ -57,7 +88,7 @@ export const thunkCreateReview =
       });
       const data = await res.json();
       console.log("THIS IS THE DATA", data);
-      dispatch(addReviewData([data], data));
+      dispatch(createReviewData(data));
       return data;
     } catch (err) {
       if (err.json) return await err.json();
@@ -183,10 +214,19 @@ export const singleProductReducer = (state = initalState, action) => {
       const newState = structuredClone({ ...state, ...product });
       return newState;
     }
+    case actionTypes.CREATE_PRODUCT_REVIEW: {
+      const { review } = action.payload;
+      const newState = structuredClone(state);
+      newState.reviews = [...newState.reviews, review];
+      newState.userReview = review;
+      newState.numRatings += 1;
+      return newState;
+    }
     case actionTypes.DELETE_PRODUCT: {
       return initalState;
     }
     case actionTypes.CLEAR_PRODUCT: {
+      console.log("THIS IS RUNNNNING");
       return initalState;
     }
     case actionTypes.GET_PRODUCT_REVIEWS: {
@@ -207,6 +247,15 @@ export const singleProductReducer = (state = initalState, action) => {
       if (existingReviewIdx !== -1) {
         newState.reviews[existingReviewIdx] = review;
       }
+      return newState;
+    }
+    case actionTypes.DELETE_PRODUCT_REVIEW: {
+      const newState = structuredClone(state);
+      const { reviewId } = action.payload;
+      console.log("REVIEWID", reviewId);
+      newState.userReview = null;
+      newState.numRatings -= 1;
+      newState.reviews = newState.reviews.filter((rev) => rev.id != reviewId);
       return newState;
     }
     default:

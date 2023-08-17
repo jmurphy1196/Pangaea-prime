@@ -11,6 +11,18 @@ export const removeSession = () => ({
   type: actionTypes.REMOVE_SESSION,
 });
 
+export const thunkRemoveSession = () => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/session`, {
+      method: "DELETE",
+    });
+    dispatch(removeSession());
+  } catch (err) {
+    if (err.json) return await err.json();
+    return err;
+  }
+};
+
 export const thunkSetSession =
   ({ credential, password }) =>
   async (dispatch) => {

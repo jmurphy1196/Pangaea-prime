@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 export function ProductReviews({ productId }) {
   const [loading, setLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const user = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.singleProduct.reviews);
   const userReview = useSelector((state) => state.singleProduct.userReview);
@@ -32,9 +33,14 @@ export function ProductReviews({ productId }) {
             review={userReview}
             productId={productId}
           />
-          <button className='edit-review' onClick={() => setModalIsOpen(true)}>
-            Edit
-          </button>
+          {user && (
+            <button
+              className='edit-review'
+              onClick={() => setModalIsOpen(true)}
+            >
+              Edit
+            </button>
+          )}
         </>
       ) : (
         <>
@@ -43,9 +49,14 @@ export function ProductReviews({ productId }) {
             onClose={() => setModalIsOpen(false)}
             productId={productId}
           />
-          <button className='edit-review' onClick={() => setModalIsOpen(true)}>
-            Create Review
-          </button>
+          {user && (
+            <button
+              className='edit-review'
+              onClick={() => setModalIsOpen(true)}
+            >
+              Create Review
+            </button>
+          )}
         </>
       )}
       {reviews.map((review) => (

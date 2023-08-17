@@ -89,3 +89,8 @@
     padding: 5px 10px;
     border: none;
 }
+
+.auth__form ul li {
+    color: red;
+    font-size: .8rem;
+}

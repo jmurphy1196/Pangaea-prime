@@ -73,7 +73,7 @@ export function Auth({ signin, signup }) {
   const signupFormGroups = (
     <>
       <div className='auth__form__group'>
-        <label>Email</label>
+        <label className={`${errors.email && "errors"}`}>Email</label>
         <input type='email' onChange={(e) => setEmail(e.target.value)} />
       </div>
       <div className='auth__form__group'>
@@ -81,15 +81,15 @@ export function Auth({ signin, signup }) {
         <input type='text' onChange={(e) => setUsername(e.target.value)} />
       </div>
       <div className='auth__form__group'>
-        <label>Password</label>
+        <label className={`${errors.password && "errors"}`}>Password</label>
         <input type='password' onChange={(e) => setPassword(e.target.value)} />
       </div>
       <div className='auth__form__group'>
-        <label>First name</label>
+        <label className={`${errors.firstName && "errors"}`}>First name</label>
         <input type='text' onChange={(e) => setFirstName(e.target.value)} />
       </div>
       <div className='auth__form__group'>
-        <label>Last name</label>
+        <label className={`${errors.lastName && "errors"}`}>Last name</label>
         <input type='text' onChange={(e) => setLastName(e.target.value)} />
       </div>
     </>
@@ -102,7 +102,15 @@ export function Auth({ signin, signup }) {
       </div>
       <form className='auth__form' onSubmit={handleSubmit}>
         <h1 className='auth__form__header'>{signin ? "Sign in" : "Sign up"}</h1>
-        {errors && <span className='errors'>{errors.title}</span>}
+        {errors && signin ? (
+          <span className='errors'>{errors.title}</span>
+        ) : (
+          <ul>
+            {Object.values(errors).map((err) => {
+              if (err !== "Bad request") return <li>{err}</li>;
+            })}
+          </ul>
+        )}
         {signin && signinFormGroups}
         {signup && signupFormGroups}
         {signin && (

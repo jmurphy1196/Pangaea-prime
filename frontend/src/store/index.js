@@ -5,12 +5,14 @@ import logger from "redux-logger";
 import { productsReducer } from "./products";
 import { singleProductReducer } from "./singleProduct";
 import { categoriesReducer } from "./categories";
+import { cartReducer } from "./cart";
 
 const rootReducer = combineReducers({
   session,
   products: productsReducer,
   singleProduct: singleProductReducer,
   categories: categoriesReducer,
+  cart: cartReducer,
 });
 
 let enhancer;

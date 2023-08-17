@@ -10,6 +10,8 @@ import { MyAccount } from "./components/account/MyAccount";
 import { ProductsPage } from "./components/pages/ProductsPage";
 import { SellPage } from "./components/pages/SellPage";
 import { ProductPage } from "./components/pages/ProductPage";
+import { thunkGetCart } from "./store/cart";
+import { CartPage } from "./components/pages/CartPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +23,14 @@ function App() {
       await dispatch(thunkGetSession());
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      (async () => {
+        await dispatch(thunkGetCart());
+      })();
+    }
+  }, [user, dispatch]);
 
   return (
     <>
@@ -49,6 +59,9 @@ function App() {
         </Route>
         <ProtectedRoute exact path='/account'>
           <MyAccount />
+        </ProtectedRoute>
+        <ProtectedRoute exact path='/cart'>
+          <CartPage />
         </ProtectedRoute>
       </Switch>
     </>

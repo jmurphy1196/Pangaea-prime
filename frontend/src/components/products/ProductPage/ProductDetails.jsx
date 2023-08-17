@@ -1,16 +1,36 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useHistory } from "react-router-dom";
+
+import { useEffect, useState } from "react";
 import "../../../styles/components/productDetails.css";
+import { thunkAddProductToCart } from "../../../store/cart";
 export function ProductDetails() {
   const product = useSelector((state) => state.singleProduct);
   const user = useSelector((state) => state.session.user);
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const [productInCart, setProductInCart] = useState(false);
   const history = useHistory();
+  console.log("KLSDJFLKJDSFKLJFDSLKJFLKSDJ");
+  if (cart) {
+    console.log(cart.products.find((p) => p.id == product.id));
+  }
+
+  useEffect(() => {
+    if (product.id && user && cart) {
+      const prod = cart.products.find((p) => p.id == product.id);
+      if (prod) setProductInCart(true);
+    }
+  }, [product, user, cart]);
   if (!product) return false;
 
+  const handleAddProductToCart = async (e) => {
+    const res = await dispatch(thunkAddProductToCart(product.id, 1));
+  };
   return (
     <>
       <div className='product__details'>
@@ -44,7 +64,16 @@ export function ProductDetails() {
         <div className='product__details__body'>
           <div className='product__details__body__price'>
             <h3>${product.price}</h3>
-            <button>Add to Cart</button>
+            {productInCart ? (
+              <button> In Cart</button>
+            ) : (
+              <button
+                disabled={product.stock_quantity <= 0}
+                onClick={handleAddProductToCart}
+              >
+                {product.stock_quantity <= 0 ? "Out of Stock" : "Add to Cart"}
+              </button>
+            )}
             {user && user.id == product.seller_id && (
               <button
                 className='edit'

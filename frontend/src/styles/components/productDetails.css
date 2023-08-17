@@ -70,6 +70,10 @@
 .product__details__body__price button.edit{
     background-color: var(--secondary);
 }
+.product__details__body__price button[disabled]{
+    cursor: not-allowed;
+    background-color: lightgray;
+}
 .product__details__body__info {
     display: flex;
     flex-direction: column;

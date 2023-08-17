@@ -9,9 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/components/navbar.css";
 import { thunkGetCategories } from "../store/categories";
+import { thunkRemoveSession } from "../store/session";
 
 export function Navigation() {
   const user = useSelector((state) => state.session.user);
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const categories = useSelector(
     (state) => state.categories.orderedCategories || []
@@ -108,9 +110,13 @@ export function Navigation() {
               </button>
             </div>
             <div className='navbar__actions__item'>
-              <button>
+              <button
+                onClick={() => {
+                  history.push("/cart");
+                }}
+              >
                 <FontAwesomeIcon icon={faCartShopping} className='cart' />
-                <span style={{ marginLeft: 5 }}>Cart</span>
+                <span style={{ marginLeft: 5 }}>{cart.numberOfProducts}</span>
               </button>
             </div>
           </div>
@@ -133,6 +139,12 @@ export function Navigation() {
             </Link>
           ))}
           <Link to='/sell'>Sell</Link>
+          {/* TODO temp */}
+          {user && (
+            <button onClick={async () => dispatch(thunkRemoveSession())}>
+              Sign out
+            </button>
+          )}
         </div>
       </nav>
     </>
