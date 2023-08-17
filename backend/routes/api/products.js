@@ -308,12 +308,15 @@ router.get(
   "/:productId/reviews",
   checkProductExists,
   async (req, res, next) => {
-    const userReview = await req.product.getRatings({
-      where: {
-        user_id: req.user.id,
-        product_id: req.product.id,
-      },
-    });
+    let userReview;
+    if (req.user) {
+      userReview = await req.product.getRatings({
+        where: {
+          user_id: req.user.id,
+          product_id: req.product.id,
+        },
+      });
+    }
     const productReviews = await req.product.getRatings({
       include: [
         {
@@ -324,7 +327,7 @@ router.get(
     });
     res.status(200).json({
       reviews: productReviews,
-      userReview: userReview.length ? userReview[0] : null,
+      userReview: userReview ? userReview[0] : null,
     });
   }
 );

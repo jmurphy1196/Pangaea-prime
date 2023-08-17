@@ -35,9 +35,13 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 
   if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-    const err = new UnauthorizedError("Login failed", {
-      credential: "the provided credentials were invalid",
-    });
+    const err = new UnauthorizedError(
+      "Login failed",
+      {
+        credential: "the provided credentials were invalid",
+      },
+      "Invalid credentials"
+    );
     return next(err);
   }
   const safeUser = {

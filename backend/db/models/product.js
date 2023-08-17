@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
       Product.belongsTo(models.Brand, { foreignKey: "brand_id" });
+      Product.belongsToMany(models.Cart, {
+        through: models.CartProduct,
+        foreignKey: "product_id",
+        as: "carts",
+      });
     }
   }
   Product.init(

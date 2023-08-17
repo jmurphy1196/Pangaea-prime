@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "seller_id",
         as: "products",
       });
+      User.hasOne(models.Cart, { foreignKey: "user_id", as: "cart" });
     }
   }
 
@@ -68,6 +69,12 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       tableName: "Users",
+      hooks: {
+        afterCreate: async (user, options) => {
+          const cart = await user.createCart();
+          return cart;
+        },
+      },
     }
   );
   return User;

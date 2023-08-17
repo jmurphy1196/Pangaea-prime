@@ -11,6 +11,7 @@ const {
   checkReviewFields,
   checkUserCanEditReview,
 } = require("./review");
+const { checkCartProductFields } = require("./cart");
 
 module.exports = {
   validateLogin,
@@ -22,4 +23,5 @@ module.exports = {
   checkReviewExists,
   checkReviewFields,
   checkUserCanEditReview,
+  checkCartProductFields,
 };
