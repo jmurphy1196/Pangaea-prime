@@ -9,36 +9,30 @@ module.exports = {
       options.schema = process.env.SCHEMA;
     }
 
+    const productCategoryAssociations = [];
+
+    for (let productId = 1; productId <= 56; productId++) {
+      const numCategories = Math.floor(Math.random() * 3) + 1;
+      const usedCategories = new Set();
+
+      for (let j = 0; j < numCategories; j++) {
+        let categoryId;
+
+        do {
+          categoryId = Math.floor(Math.random() * 10) + 1;
+        } while (usedCategories.has(categoryId));
+
+        usedCategories.add(categoryId);
+
+        productCategoryAssociations.push({
+          product_id: productId,
+          category_id: categoryId,
+        });
+      }
+    }
+
     // Using the ProductCategory model to bulk create sample data with options
-    await ProductCategory.bulkCreate(
-      [
-        {
-          product_id: 1,
-          category_id: 1,
-        },
-        {
-          product_id: 1,
-          category_id: 2,
-        },
-        {
-          product_id: 2,
-          category_id: 1,
-        },
-        {
-          product_id: 3,
-          category_id: 1,
-        },
-        {
-          product_id: 4,
-          category_id: 1,
-        },
-        {
-          product_id: 5,
-          category_id: 1,
-        },
-      ],
-      options
-    );
+    await ProductCategory.bulkCreate(productCategoryAssociations, options);
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -48,10 +42,10 @@ module.exports = {
       options.schema = process.env.SCHEMA;
     }
 
+    // Delete all associations for products 1 through 56
     await ProductCategory.destroy({
       where: {
-        product_id: { [Op.in]: [1, 2, 3, 4, 5, 6] },
-        category_id: { [Op.in]: [1, 2, 3, 4, 5, 6] },
+        product_id: { [Op.between]: [1, 56] },
       },
       ...options,
     });

@@ -88,3 +88,8 @@
 .product__details__body__info__group > p {
     width: 20%;
 }
+.product__details__body__info__group > span {
+    word-wrap: break-word;
+    max-width: 100%;
+    width: 80%;
+}

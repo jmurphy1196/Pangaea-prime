@@ -9,7 +9,6 @@ export function LandingPage() {
   useEffect(() => {
     (async () => {
       const res = await dispatch(thunkGetProducts());
-      console.log("this is the res", res);
     })();
   }, [dispatch]);
   return (

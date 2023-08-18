@@ -36,7 +36,10 @@ export function ProductDetails() {
       <div className='product__details'>
         <header>
           <h1>{product.product_name}</h1>
-          <Link className='product__details__brand'>
+          <Link
+            className='product__details__brand'
+            to={`/products?brand=${product.Brand.name}`}
+          >
             visit {product.Brand?.name} store
           </Link>
           <div className='product__details__rating'>
@@ -65,7 +68,7 @@ export function ProductDetails() {
           <div className='product__details__body__price'>
             <h3>${product.price}</h3>
             {productInCart ? (
-              <button> In Cart</button>
+              <button onClick={(e) => history.push(`/cart`)}> In Cart</button>
             ) : (
               <button
                 disabled={product.stock_quantity <= 0}

@@ -19,7 +19,10 @@ export function Product({ productId }) {
           <Link to={`/product/${product.id}`}>
             <h1 className='product__name'>{product.product_name}</h1>
           </Link>
-          <Link to='/products' className='product__brand'>
+          <Link
+            to={`/products?brand=${product.Brand.name}`}
+            className='product__brand'
+          >
             {product.Brand.name}
           </Link>
           <div className='product__ratings'>

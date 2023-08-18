@@ -68,7 +68,7 @@ export function EditReviewModal({ isOpen, onClose, productId }) {
 
   useEffect(() => {
     const errors = {};
-    if (reviewContent.length < 10 || reviewContent > 200)
+    if (reviewContent.length < 10 || reviewContent.length > 200)
       errors.reviewContent = "Review must be between 10 and 200 characters";
     setFormErrors(errors);
   }, [reviewContent]);
@@ -106,7 +106,7 @@ export function EditReviewModal({ isOpen, onClose, productId }) {
             id=''
             cols='30'
             rows='7'
-            className={formErrors.reviewContent && "errors"}
+            className={formErrors.reviewContent && formTouched && "errors"}
             placeholder='review...'
             value={reviewContent}
             onChange={(e) => setReviewContent(e.target.value)}

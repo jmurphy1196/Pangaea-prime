@@ -33,6 +33,7 @@ router.get("/", async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 15;
     const offset = (+req.query.page - 1) * limit || 0;
     const product_name = req.query.name || "";
+    const brand_name = req.query.brand || "";
     let categories = req.query.categories;
 
     if (typeof categories === "string") categories = categories.split(",");
@@ -52,8 +53,12 @@ router.get("/", async (req, res, next) => {
       },
       {
         model: Brand,
+        where: brand_name
+          ? { name: { [likeOperator]: `%${brand_name}%` } }
+          : undefined,
       },
     ];
+
     if (categories && categories.length) {
       includeClause[0].where = {
         name: {

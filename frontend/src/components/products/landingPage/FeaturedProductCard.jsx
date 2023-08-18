@@ -12,7 +12,10 @@ export function FeaturedProductCard({ productId }) {
         <h1 className='featured__product__heading'>{category}</h1>
         <img src={product.main_image} alt='' />
       </div>
-      <Link className='featured__product__caption' to=''>
+      <Link
+        className='featured__product__caption'
+        to={`/products?brand=${product.Brand.name}`}
+      >
         Shop {product.Brand.name}
       </Link>
     </div>

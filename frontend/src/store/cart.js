@@ -21,6 +21,37 @@ const addProductToCart = (cart) => ({
   },
 });
 
+const updateProductQty = (product) => ({
+  type: actionTypes.UPDATE_CART_QTY,
+  payload: {
+    product,
+  },
+});
+
+const removeProductCart = (productId) => ({
+  type: actionTypes.REMOVE_PRODUCT_CART,
+  payload: {
+    productId,
+  },
+});
+
+export const thunkRemoveProductCart = (productId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/carts`, {
+      method: "DELETE",
+      body: {
+        productId,
+      },
+    });
+    dispatch(removeProductCart(productId));
+    return await res.json();
+  } catch (err) {
+    console.log("There was an error", err);
+    if (err.json) return await err.json();
+    return err;
+  }
+};
+
 export const thunkGetCart = () => async (dispatch) => {
   try {
     const res = await csrfFetch(`/api/carts/current`);
@@ -54,6 +85,22 @@ export const thunkAddProductToCart =
     }
   };
 
+export const thunkUpdateProductQty =
+  (productId, quantity) => async (dispatch) => {
+    try {
+      const res = await csrfFetch(`/api/carts`, {
+        method: "PUT",
+        body: { productId, quantity },
+      });
+      const data = await res.json();
+      dispatch(updateProductQty(data));
+    } catch (err) {
+      console.log("there was an err", err);
+      if (err.json) return await err.json();
+      return err;
+    }
+  };
+
 export const cartReducer = (state = initalState, action) => {
   switch (action.type) {
     case actionTypes.GET_CART: {
@@ -68,6 +115,24 @@ export const cartReducer = (state = initalState, action) => {
       const { cart } = action.payload;
       newState.products = cart.products;
       newState.numberOfProducts = cart.products.length;
+      return newState;
+    }
+    case actionTypes.UPDATE_CART_QTY: {
+      const newState = structuredClone(state);
+      const { product } = action.payload;
+      newState.products = newState.products.map((prod) => {
+        if (prod.id == product.id) return product;
+        return prod;
+      });
+      return newState;
+    }
+    case actionTypes.REMOVE_PRODUCT_CART: {
+      const newState = structuredClone(state);
+      const { productId } = action.payload;
+      newState.products = newState.products.filter(
+        (prod) => prod.id != productId
+      );
+      newState.numberOfProducts -= 1;
       return newState;
     }
     default:

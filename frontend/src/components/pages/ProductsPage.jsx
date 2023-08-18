@@ -21,7 +21,7 @@ export function ProductsPage() {
       console.log("THIS IS THE RES", res);
     })();
   }, [dispatch, location.search]);
-  if (!productIds.length) return false;
+  if (!productIds.length) return <p>No search results found...</p>;
   return (
     <>
       <div className='products__page'>

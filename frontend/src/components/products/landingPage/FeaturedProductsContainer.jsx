@@ -16,7 +16,7 @@ export function FeaturedProductsContainer() {
             <h1>{bannerProduct.product_name}</h1>
             <h1 className='featured__banner__price'>${bannerProduct.price}</h1>
           </header>
-          <img src='/images/tv-stick.png' alt='' />
+          <img src={productStore[productIds[0]].main_image} alt='' />
         </div>
         <FeaturedProductList />
       </div>

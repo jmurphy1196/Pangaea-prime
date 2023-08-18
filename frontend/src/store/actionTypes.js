@@ -14,6 +14,8 @@ const EDIT_PRODUCT_REVIEW = "singleProduct/editProductReview";
 const DELETE_PRODUCT_REVIEW = "singleProduct/deleteProductReview";
 const GET_CART = "cart/getCartData";
 const ADD_TO_CART = "cart/addProductToCard";
+const UPDATE_CART_QTY = "cart/updateProductQty";
+const REMOVE_PRODUCT_CART = "cart/removeProduct";
 
 export const actionTypes = {
   SET_SESSION,
@@ -32,4 +34,6 @@ export const actionTypes = {
   DELETE_PRODUCT_REVIEW,
   GET_CART,
   ADD_TO_CART,
+  UPDATE_CART_QTY,
+  REMOVE_PRODUCT_CART,
 };
