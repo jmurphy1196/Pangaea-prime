@@ -5,7 +5,11 @@ const {
   Product,
   OrderProduct,
 } = require("../../db/models");
-const { checkCreateOrderFields } = require("../../middleware");
+const {
+  checkCreateOrderFields,
+  checkOrderExists,
+  checkUserCanEditOrder,
+} = require("../../middleware");
 
 const router = require("express").Router();
 
@@ -71,6 +75,31 @@ router.post(
     });
 
     return res.status(200).json(newOrder);
+  }
+);
+
+router.get(
+  "/:orderId",
+  checkOrderExists,
+  requireUser,
+  checkUserCanEditOrder,
+  async (req, res, next) => {
+    const order = await Order.findByPk(req.params.orderId, {
+      include: [
+        {
+          model: OrderProduct,
+          as: "products",
+          include: [
+            {
+              model: Product,
+              as: "product",
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json(order);
   }
 );
 

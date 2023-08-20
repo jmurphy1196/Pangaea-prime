@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkCreateOrder } from "../store/orders";
+import { OrderProducts } from "./OrderProducts";
+import { useHistory } from "react-router-dom";
 
 export function CreateOrder() {
   const stripe = useStripe();
@@ -22,6 +24,7 @@ export function CreateOrder() {
   const [formErrors, setFormErrors] = useState({});
   const [formTouched, setFormTouched] = useState(false);
   const cardElement = elements.getElement(CardElement);
+  const history = useHistory();
 
   useEffect(() => {
     const errors = {};
@@ -72,6 +75,7 @@ export function CreateOrder() {
     };
     if (address_2.length > 0) addressData.address_2 = address_2;
     const res = await dispatch(thunkCreateOrder(addressData));
+    if (res.id) history.push(`/orders/${res.id}`);
   };
   if (!stripe || !cart) return false;
 
@@ -120,38 +124,7 @@ export function CreateOrder() {
 
   const orderSummary = (
     <>
-      <div className='order__products'>
-        {cart.products.map((product) => (
-          <div className='order__product' key={product.id}>
-            <div className='order__product-img'>
-              <img src={product.main_image} alt='' />
-            </div>
-            <div className='order__product-details'>
-              <h2>{product.product_name}</h2>
-              <p>Qty: {product.CartProduct.quantity}</p>
-              <p>Price: ${product.CartProduct.quantity * product.price}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className='order__products-details'>
-        <span>
-          Items:{" "}
-          {cart.products.reduce(
-            (acc, val) => acc + val.CartProduct.quantity,
-            0
-          )}
-        </span>
-        <span>
-          Total: $
-          {Number(
-            cart.products.reduce(
-              (acc, val) => acc + val.price * val.CartProduct.quantity,
-              0
-            )
-          ).toFixed(2)}
-        </span>
-      </div>
+      <OrderProducts products={cart.products} />
       <div className='order__product-details-submit'>
         <button type='button' onClick={handleSubmit}>
           Place order

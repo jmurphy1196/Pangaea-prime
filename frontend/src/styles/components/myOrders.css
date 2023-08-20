@@ -1,9 +1,34 @@
 .my__orders {
     padding: 10px 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .my__orders-heading {
     color: black;
     font-size: 1.3rem;
     text-align: start;
+    padding: 10px;
+    border-bottom: 1px solid var(--light);
+}
+.order__card {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid var(--light);
+}
+.order-status {
+    padding: 2px 10px;
+    display: inline-block;
+    border-radius: 20px;
+    color: white;
+    margin-left: 3px;
+}
+
+.order-status-pending {
+    background-color: lightgray;
+}
+.order-link:hover {
+    color: var(--primary)
 }

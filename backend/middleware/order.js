@@ -1,6 +1,11 @@
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../util/validation");
 const { US_STATES } = require("../constants");
+const {
+  checkResourceExists,
+  checkUserCanEditResource,
+} = require("../util/checkResourceGenerator");
+const { Order } = require("../db/models");
 
 const checkCreateOrderFields = [
   check("address_1")
@@ -35,6 +40,11 @@ const checkCreateOrderFields = [
   handleValidationErrors,
 ];
 
+const checkOrderExists = checkResourceExists("orderId", Order, "order");
+const checkUserCanEditOrder = checkUserCanEditResource(["order", "user_id"]);
+
 module.exports = {
   checkCreateOrderFields,
+  checkOrderExists,
+  checkUserCanEditOrder,
 };

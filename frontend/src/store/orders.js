@@ -59,6 +59,15 @@ export const ordersReducer = (state = initalState, action) => {
 
       return newState;
     }
+    case actionTypes.GET_ORDERS: {
+      const newState = structuredClone(state);
+      const { orders } = action.payload;
+      for (let order of orders) {
+        if (!newState[order.id]) newState.orderedOrders.push(order.id);
+        newState[order.id] = order;
+      }
+      return newState;
+    }
     default:
       return state;
   }

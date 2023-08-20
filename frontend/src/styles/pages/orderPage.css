@@ -1,0 +1,16 @@
+.order__page {
+padding: 10px 10%;
+}
+.order__page header {
+    color: black;
+    font-size: 1.4rem;
+    text-align: start;
+    padding: 10px;
+}
+.order__page header h1 {
+
+    text-align: start;
+}
+.order__page header span {
+    font-size: 1.1rem;
+    }

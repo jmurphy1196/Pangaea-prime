@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -66,10 +67,16 @@ export function Product({ productId }) {
           </div>
           <div className='product__delivery'>
             <p>
-              Free delivery <strong>Tue, Aug 15</strong>
+              Free delivery{" "}
+              <strong>
+                {dayjs(new Date()).add(2, "day").format("ddd, MMM D")}
+              </strong>
             </p>
             <p>
-              or fastest delivery <strong>Mon, Aug 15</strong>
+              or fastest delivery{" "}
+              <strong>
+                {dayjs(new Date()).add(1, "day").format("ddd, MMM D")}
+              </strong>
             </p>
           </div>
           <div className='product__stock'>

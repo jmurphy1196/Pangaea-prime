@@ -16,6 +16,7 @@ import { CreateOrder } from "./components/CreateOrder";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { MyOrders } from "./components/MyOrders";
+import { OrderPage } from "./components/pages/OrderPage";
 
 const stripePromise = loadStripe(
   "pk_test_51I7K2nLQef5YAp3FLPhtvRil2HHtICqqjJLflNVcc9pzhQ5T4rEnDJ7pPh733MqV3Ip7x4wwfLT52manvE9771cy00Bh1pPVZl"
@@ -48,6 +49,7 @@ function App() {
           <Route exact path='/'>
             <LandingPage />
           </Route>
+
           <Route exact path='/signin'>
             <Auth signin />
           </Route>
@@ -77,6 +79,9 @@ function App() {
           </ProtectedRoute>
           <ProtectedRoute exact path='/orders'>
             <MyOrders />
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/orders/:orderId'>
+            <OrderPage />
           </ProtectedRoute>
         </Switch>
       </Elements>

@@ -12,7 +12,11 @@ const {
   checkUserCanEditReview,
 } = require("./review");
 const { checkCartProductFields } = require("./cart");
-const { checkCreateOrderFields } = require("./order");
+const {
+  checkCreateOrderFields,
+  checkOrderExists,
+  checkUserCanEditOrder,
+} = require("./order");
 
 module.exports = {
   validateLogin,
@@ -26,4 +30,6 @@ module.exports = {
   checkUserCanEditReview,
   checkCartProductFields,
   checkCreateOrderFields,
+  checkOrderExists,
+  checkUserCanEditOrder,
 };
