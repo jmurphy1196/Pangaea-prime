@@ -1,0 +1,9 @@
+.my__orders {
+    padding: 10px 10%;
+}
+
+.my__orders-heading {
+    color: black;
+    font-size: 1.3rem;
+    text-align: start;
+}

@@ -103,7 +103,7 @@ export function Navigation() {
               </Link>
             </div>
             <div className='navbar__actions__item'>
-              <button>
+              <button onClick={() => history.push("/orders")}>
                 Returns
                 <br />
                 <span>& Orders</span>

@@ -66,11 +66,28 @@
     margin-top: 3px;
     
 }
-.cart__details {
+.cart__details-container {
     width: 60%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 10px;
+    gap: 10px;
+}
+.cart__details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart__details-continue   {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.cart__details-continue > button {
+    padding: 4px 10px;
+    border: none;
+    background-color: var(--primary);
+    color: white;
 }
 
 

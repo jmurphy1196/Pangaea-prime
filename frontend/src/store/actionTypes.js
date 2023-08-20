@@ -16,6 +16,8 @@ const GET_CART = "cart/getCartData";
 const ADD_TO_CART = "cart/addProductToCard";
 const UPDATE_CART_QTY = "cart/updateProductQty";
 const REMOVE_PRODUCT_CART = "cart/removeProduct";
+const CREATE_ORDER = "order/createOrder";
+const GET_ORDERS = "order/getOrders";
 
 export const actionTypes = {
   SET_SESSION,
@@ -36,4 +38,6 @@ export const actionTypes = {
   ADD_TO_CART,
   UPDATE_CART_QTY,
   REMOVE_PRODUCT_CART,
+  CREATE_ORDER,
+  GET_ORDERS,
 };

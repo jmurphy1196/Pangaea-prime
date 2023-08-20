@@ -162,11 +162,13 @@ router.post("/", requireUser, checkProductFields, async (req, res, next) => {
     } = req.body;
     const errors = {};
     let brand_object = await Brand.findOne({
-      name: brand,
+      where: {
+        name: brand,
+      },
     });
     //there is no existing brand
     if (!brand_object) {
-      brand_object = Brand.create({
+      brand_object = await Brand.create({
         name: brand,
       });
     }

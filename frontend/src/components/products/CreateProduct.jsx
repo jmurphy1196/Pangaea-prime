@@ -426,7 +426,7 @@ export function CreateProduct({ edit }) {
               className='hidden'
               ref={additionalImageUploadInput}
               onChange={(e) => {
-                if (additionalImages.length < 5) {
+                if (additionalImages.length < 4) {
                   if (e.target.files[0]) {
                     const file = e.target.files[0];
                     if (file.type.substring("image/")) {

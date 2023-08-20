@@ -135,6 +135,9 @@ export const cartReducer = (state = initalState, action) => {
       newState.numberOfProducts -= 1;
       return newState;
     }
+    case actionTypes.CREATE_ORDER: {
+      return initalState;
+    }
     default:
       return state;
   }

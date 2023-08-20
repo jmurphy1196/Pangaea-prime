@@ -12,6 +12,14 @@ import { SellPage } from "./components/pages/SellPage";
 import { ProductPage } from "./components/pages/ProductPage";
 import { thunkGetCart } from "./store/cart";
 import { CartPage } from "./components/pages/CartPage";
+import { CreateOrder } from "./components/CreateOrder";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { MyOrders } from "./components/MyOrders";
+
+const stripePromise = loadStripe(
+  "pk_test_51I7K2nLQef5YAp3FLPhtvRil2HHtICqqjJLflNVcc9pzhQ5T4rEnDJ7pPh733MqV3Ip7x4wwfLT52manvE9771cy00Bh1pPVZl"
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -34,36 +42,44 @@ function App() {
 
   return (
     <>
-      <Navigation />
-      <Switch>
-        <Route exact path='/'>
-          <LandingPage />
-        </Route>
-        <Route exact path='/signin'>
-          <Auth signin />
-        </Route>
-        <Route exact path='/signup'>
-          <Auth signup />
-        </Route>
-        <Route path='/products'>
-          <ProductsPage />
-        </Route>
-        <Route exact path='/product/:productId'>
-          <ProductPage />
-        </Route>
-        <ProtectedRoute exact path='/sell'>
-          <SellPage />
-        </ProtectedRoute>
-        <Route exact path='/product/:productId/edit'>
-          <SellPage edit />
-        </Route>
-        <ProtectedRoute exact path='/account'>
-          <MyAccount />
-        </ProtectedRoute>
-        <ProtectedRoute exact path='/cart'>
-          <CartPage />
-        </ProtectedRoute>
-      </Switch>
+      <Elements stripe={stripePromise}>
+        <Navigation />
+        <Switch>
+          <Route exact path='/'>
+            <LandingPage />
+          </Route>
+          <Route exact path='/signin'>
+            <Auth signin />
+          </Route>
+          <Route exact path='/signup'>
+            <Auth signup />
+          </Route>
+          <Route path='/products'>
+            <ProductsPage />
+          </Route>
+          <Route exact path='/product/:productId'>
+            <ProductPage />
+          </Route>
+          <ProtectedRoute exact path='/sell'>
+            <SellPage />
+          </ProtectedRoute>
+          <Route exact path='/product/:productId/edit'>
+            <SellPage edit />
+          </Route>
+          <ProtectedRoute exact path='/account'>
+            <MyAccount />
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/cart'>
+            <CartPage />
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/order'>
+            <CreateOrder />
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/orders'>
+            <MyOrders />
+          </ProtectedRoute>
+        </Switch>
+      </Elements>
     </>
   );
 }

@@ -1,0 +1,88 @@
+.create__order {
+    color: black;
+    padding: 10px 10%;
+}
+
+.create__order > header {
+    display: flex;
+    color: black;
+    justify-content: flex-start;
+    text-align: start;
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--light);
+    padding-bottom: 4px;
+
+}
+.create__order > header > span {
+    font-size: 1rem;
+}
+
+.create__order-address {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.create__order-address__group {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+
+}
+.create__order-address__group > input {
+    border: none;
+    border-bottom: 1px solid gray;
+    outline: none;
+}
+.f-end {
+    justify-content: flex-end;
+}
+.create__order-address__group > button {
+    background-color: var(--primary);
+    padding: 4px 10px;
+    border: none;
+    color: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-radius: 5px;
+}
+.card-container {
+    padding: 10px;
+    width: 300px;
+}
+
+.order__products {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.order__product {
+ display: flex;
+ gap: 10px;
+ padding: 5px;
+ border-radius: 5px;
+ border: 1px solid var(--light)
+}
+.order__product-img {
+    width: 200px;
+    height: 200px;
+}
+
+.order__products-details {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+.order__product-details-submit {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.order__product-details-submit button {
+    border: none;
+    background-color: var(--primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+
