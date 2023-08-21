@@ -10,6 +10,7 @@ const {
   checkOrderExists,
   checkUserCanEditOrder,
 } = require("../../middleware");
+const { BadReqestError } = require("../../errors");
 
 const router = require("express").Router();
 
@@ -100,6 +101,24 @@ router.get(
     });
 
     return res.status(200).json(order);
+  }
+);
+
+router.put(
+  "/:orderId/cancel",
+  checkOrderExists,
+  requireUser,
+  checkUserCanEditOrder,
+  async (req, res, next) => {
+    if (req.order.status !== "pending")
+      return next(
+        new BadReqestError("Can only cancel orders that have not shipped yet", {
+          status: "Cannot change order",
+        })
+      );
+    req.order.status = "cancelled";
+    await req.order.save();
+    res.status(200).json(req.order);
   }
 );
 

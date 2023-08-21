@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeOrder, thunkGetOrder } from "../../store/singleOrder";
+import {
+  removeOrder,
+  thunkCancelOrder,
+  thunkGetOrder,
+} from "../../store/singleOrder";
 import { OrderProducts } from "../OrderProducts";
 import "../../styles/pages/orderPage.css";
 
@@ -19,6 +23,9 @@ export function OrderPage() {
       dispatch(removeOrder());
     };
   }, [orderId, dispatch]);
+  const handleDelete = async () => {
+    const res = await dispatch(thunkCancelOrder(orderId));
+  };
   if (!orderId) return false;
   if (!order) return false;
   return (
@@ -34,6 +41,11 @@ export function OrderPage() {
           </span>
         </header>
         {order.products && <OrderProducts products={order.products} />}
+        {order.status === "pending" && (
+          <div className='order__actions'>
+            <button onClick={handleDelete}>Cancel</button>
+          </div>
+        )}
       </div>
     </>
   );

@@ -14,6 +14,28 @@ export const removeOrder = () => ({
   type: actionTypes.REMOVE_ORDER,
 });
 
+const cancelOrder = (orderId) => ({
+  type: actionTypes.CANCEL_ORDER,
+  payload: {
+    orderId,
+  },
+});
+
+export const thunkCancelOrder = (orderId) => async (dispatch) => {
+  try {
+    const res = await csrfFetch(`/api/orders/${orderId}/cancel`, {
+      method: "PUT",
+    });
+    const data = await res.json();
+    dispatch(cancelOrder(orderId));
+    return data;
+  } catch (err) {
+    console.log("there was an error, ", err);
+    if (err.json) return await err.json();
+    return err;
+  }
+};
+
 export const thunkGetOrder = (orderId) => async (dispatch) => {
   try {
     const res = await csrfFetch(`/api/orders/${orderId}`);
@@ -36,6 +58,14 @@ export const singleOrderReducer = (state = initialState, action) => {
     }
     case actionTypes.REMOVE_ORDER: {
       return initialState;
+    }
+    case actionTypes.CANCEL_ORDER: {
+      const newState = structuredClone(state);
+      const { orderId } = action.payload;
+      if (newState.id == orderId) {
+        newState.status = "cancelled";
+      }
+      return newState;
     }
     default:
       return state;

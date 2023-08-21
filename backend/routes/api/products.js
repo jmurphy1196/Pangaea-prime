@@ -34,6 +34,22 @@ router.get("/", async (req, res, next) => {
     const offset = (+req.query.page - 1) * limit || 0;
     const product_name = req.query.name || "";
     const brand_name = req.query.brand || "";
+    const usrId = req.query.user;
+    if (usrId)
+      return await Product.findAll({
+        where: {
+          seller_id: usrId,
+        },
+        include: [
+          {
+            model: Category,
+            as: "Categories",
+          },
+          {
+            model: Brand,
+          },
+        ],
+      });
     let categories = req.query.categories;
 
     if (typeof categories === "string") categories = categories.split(",");

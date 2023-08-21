@@ -1,0 +1,26 @@
+.my-account__heading {
+    display: flex;
+}
+.my-account__heading h1 {
+    font-size: 2rem;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.my-account {
+    padding: 10px 10%;
+}
+
+.my-account__links ul {
+    list-style: none;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 1.4rem;
+    color: var(--secondary);
+    text-decoration: underline;
+}
+.my-account__links ul li {
+    padding: 10px;
+    border-bottom: 1px solid var(--light);
+}

@@ -14,3 +14,15 @@ padding: 10px 10%;
 .order__page header span {
     font-size: 1.1rem;
     }
+
+    .order__actions {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+    .order__actions button {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: red;
+        color: white;
+    }

@@ -29,6 +29,9 @@
 .order-status-pending {
     background-color: lightgray;
 }
+.order-status-cancelled {
+    background-color: red;
+}
 .order-link:hover {
     color: var(--primary)
 }

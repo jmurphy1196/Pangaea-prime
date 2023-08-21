@@ -68,6 +68,12 @@ export const ordersReducer = (state = initalState, action) => {
       }
       return newState;
     }
+    case actionTypes.CANCEL_ORDER: {
+      const newState = structuredClone(state);
+      const { orderId } = action.payload;
+      if (newState[orderId]) newState[orderId].status = "cancelled";
+      return newState;
+    }
     default:
       return state;
   }
