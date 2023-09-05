@@ -220,6 +220,12 @@ export const singleProductReducer = (state = initalState, action) => {
       newState.reviews = [...newState.reviews, review];
       newState.userReview = review;
       newState.numRatings += 1;
+      newState.avgRating =
+        newState.avgRating === null
+          ? review.rating
+          : (newState.avgRating * (newState.reviews.length - 1) +
+              review.rating) /
+            newState.reviews.length;
       return newState;
     }
     case actionTypes.DELETE_PRODUCT: {
@@ -234,6 +240,7 @@ export const singleProductReducer = (state = initalState, action) => {
       const newState = structuredClone(state);
       newState.reviews = reviews;
       newState.userReview = userReview;
+
       return newState;
     }
     case actionTypes.EDIT_PRODUCT_REVIEW: {
@@ -245,17 +252,38 @@ export const singleProductReducer = (state = initalState, action) => {
         (rev) => rev.id == review.id
       );
       if (existingReviewIdx !== -1) {
+        const totalReviews = newState.reviews.length;
+        const currentTotalRating = newState.avgRating * totalReviews;
+        const adjustedTotalRating =
+          currentTotalRating -
+          newState.reviews[existingReviewIdx].rating +
+          review.rating;
+        const newAverageRating = adjustedTotalRating / totalReviews;
         newState.reviews[existingReviewIdx] = review;
+        newState.avgRating = newAverageRating;
       }
       return newState;
     }
     case actionTypes.DELETE_PRODUCT_REVIEW: {
       const newState = structuredClone(state);
       const { reviewId } = action.payload;
-      console.log("REVIEWID", reviewId);
+
+      const reviewToRemove = newState.reviews.find((rev) => rev.id == reviewId);
+      if (!reviewToRemove) return newState; // If the review doesn't exist, return the current state
+
+      const totalReviewsBeforeRemoval = newState.reviews.length;
+      const currentTotalRating = newState.avgRating * totalReviewsBeforeRemoval;
+      const adjustedTotalRating = currentTotalRating - reviewToRemove.rating;
+
       newState.userReview = null;
       newState.numRatings -= 1;
       newState.reviews = newState.reviews.filter((rev) => rev.id != reviewId);
+
+      newState.avgRating =
+        newState.numRatings === 0
+          ? null
+          : adjustedTotalRating / newState.numRatings;
+
       return newState;
     }
     default:
