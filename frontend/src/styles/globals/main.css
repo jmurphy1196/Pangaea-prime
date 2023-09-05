@@ -35,6 +35,18 @@ img {
 button {
     cursor: pointer;
 }
+body {
+  padding: 0;
+  margin: 0;
+  border: 1px solid purple;
+  min-height: 100vh;
+  position: relative;
+}
+#root {
+  /* min-height: 100vh;
+  display: flex;
+  flex-direction: column; */
+}
 .modal-overlay {
   position: fixed;
   top: 0;
