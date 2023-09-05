@@ -34,9 +34,10 @@ router.get("/", async (req, res, next) => {
     const offset = (+req.query.page - 1) * limit || 0;
     const product_name = req.query.name || "";
     const brand_name = req.query.brand || "";
-    const usrId = req.query.user;
-    if (usrId)
-      return await Product.findAll({
+    const usrId = req.query.usrId;
+    console.log("THIS IS THE usrId", usrId);
+    if (usrId) {
+      const userProducts = await Product.unscoped().findAll({
         where: {
           seller_id: usrId,
         },
@@ -50,6 +51,8 @@ router.get("/", async (req, res, next) => {
           },
         ],
       });
+      return res.status(200).json(userProducts);
+    }
     let categories = req.query.categories;
 
     if (typeof categories === "string") categories = categories.split(",");
@@ -176,7 +179,6 @@ router.post("/", requireUser, checkProductFields, async (req, res, next) => {
       stock_quantity,
       categories,
     } = req.body;
-    const errors = {};
     let brand_object = await Brand.findOne({
       where: {
         name: brand,

@@ -17,6 +17,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { MyOrders } from "./components/MyOrders";
 import { OrderPage } from "./components/pages/OrderPage";
+import { Footer } from "./components/Footer";
 
 const stripePromise = loadStripe(
   "pk_test_51I7K2nLQef5YAp3FLPhtvRil2HHtICqqjJLflNVcc9pzhQ5T4rEnDJ7pPh733MqV3Ip7x4wwfLT52manvE9771cy00Bh1pPVZl"
@@ -84,6 +85,7 @@ function App() {
             <OrderPage />
           </ProtectedRoute>
         </Switch>
+        <Footer />
       </Elements>
     </>
   );
