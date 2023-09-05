@@ -6,6 +6,17 @@ Pangaea Prime is a full-stack e-commerce application inspired by Amazon. Built w
 
 ![pangaea-1](https://github.com/jmurphy1196/Pangaea-prime/assets/65454757/c1387a48-1703-45dd-b50f-4ee34b97852c)
 
+## Technologies used
+
+**Frontend**
+- JavaScript, React, Redux, HTML, CSS, Vite
+
+**Backend**
+- Node.js, Express, Sequelize, Postgres
+
+ **Cloud Services**
+ - AWS (Amazon Web Services)
+
 ## Features
 
 - **Product Listing**: Browse a wide range of products with detailed descriptions and images.
