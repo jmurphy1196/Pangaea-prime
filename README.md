@@ -12,7 +12,7 @@ Pangaea Prime is a full-stack e-commerce application inspired by Amazon. Built w
 - JavaScript, React, Redux, HTML, CSS, Vite
 
 **Backend**
-- Node.js, Express, Sequelize, Postgres
+- ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) , Express, Sequelize, Postgres
 
  **Cloud Services**
  - AWS (Amazon Web Services)
