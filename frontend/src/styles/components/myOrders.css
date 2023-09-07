@@ -29,6 +29,12 @@
 .order-status-pending {
     background-color: lightgray;
 }
+.order-status-shipped {
+    background-color: green;
+}
+.order-status-delivered {
+    background-color: blue;
+}
 .order-status-cancelled {
     background-color: red;
 }

@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       CartProduct.belongsTo(models.Product, {
         foreignKey: "product_id",
         as: "product",
+        onDelete: "CASCADE",
+      });
+      CartProduct.belongsTo(models.Cart, {
+        foreignKey: "cart_id",
+        as: "cart",
+        onDelete: "CASCADE",
       });
     }
   }

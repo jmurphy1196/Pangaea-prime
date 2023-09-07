@@ -21,6 +21,7 @@ const GET_ORDERS = "order/getOrders";
 const GET_ORDER = "singleOrder/getOrder";
 const REMOVE_ORDER = "singleOrder/removeOrderData";
 const CANCEL_ORDER = "singleOrder/cancelOrder";
+const GET_FEATURED_PRODUCTS = "featuredProducts/getFeaturedProductsData";
 
 export const actionTypes = {
   SET_SESSION,
@@ -46,4 +47,5 @@ export const actionTypes = {
   GET_ORDER,
   REMOVE_ORDER,
   CANCEL_ORDER,
+  GET_FEATURED_PRODUCTS,
 };

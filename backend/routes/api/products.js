@@ -6,6 +6,7 @@ const {
   Rating,
   ProductCategory,
   User,
+  FeaturedProduct,
 } = require("../../db/models");
 const { Op, Sequelize } = require("sequelize");
 const {
@@ -35,7 +36,6 @@ router.get("/", async (req, res, next) => {
     const product_name = req.query.name || "";
     const brand_name = req.query.brand || "";
     const usrId = req.query.usrId;
-    console.log("THIS IS THE usrId", usrId);
     if (usrId) {
       const userProducts = await Product.unscoped().findAll({
         where: {
@@ -113,6 +113,43 @@ router.get("/", async (req, res, next) => {
     console.error("There was an error fetching products", err);
     return next(err);
   }
+});
+router.put("/featured", requireUser, async (req, res, next) => {
+  const { productIds } = req.body;
+  if (productIds.length !== 5)
+    return next(
+      new BadReqestError("Must have 5 featured products", {
+        productIds: "Must have 5 featured products",
+      })
+    );
+  const currentFeatured = await FeaturedProduct.findAll();
+  for (let prod of currentFeatured) {
+    await prod.destroy();
+  }
+  for (let prodId of productIds) {
+    await FeaturedProduct.create({
+      productId: prodId,
+    });
+  }
+  return res.status(201).json("Featured products updated");
+});
+router.get("/featured", async (req, res, next) => {
+  const featuredProducts = await FeaturedProduct.findAll({
+    include: [
+      {
+        model: Product,
+        include: [
+          {
+            model: Brand,
+          },
+          {
+            model: Category,
+          },
+        ],
+      },
+    ],
+  });
+  return res.status(200).json(featuredProducts);
 });
 router.get("/:productId", checkProductExists, async (req, res, next) => {
   const fullProduct = await Product.scope("ratings").findByPk(
@@ -323,6 +360,7 @@ router.delete(
   checkProductExists,
   checkUserCanEditProduct,
   async (req, res, next) => {
+    console.log("DELETETING ");
     await req.product.destroy();
     return res.status(200).json("product deleted");
   }

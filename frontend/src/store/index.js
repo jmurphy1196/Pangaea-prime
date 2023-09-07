@@ -8,6 +8,7 @@ import { categoriesReducer } from "./categories";
 import { cartReducer } from "./cart";
 import { ordersReducer } from "./orders";
 import { singleOrderReducer } from "./singleOrder";
+import { featuredProductsReducer } from "./featuredProducts";
 
 const rootReducer = combineReducers({
   session,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   orders: ordersReducer,
   singleOrder: singleOrderReducer,
+  featuredProducts: featuredProductsReducer,
 });
 
 let enhancer;

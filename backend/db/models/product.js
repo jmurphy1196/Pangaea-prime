@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
         through: models.CartProduct,
         foreignKey: "product_id",
         as: "carts",
+        onDelete: "CASCADE",
+      });
+      Product.hasMany(models.FeaturedProduct, {
+        foreignKey: "productId",
+        onDelete: "CASCADE",
       });
     }
   }

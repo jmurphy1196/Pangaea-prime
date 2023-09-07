@@ -3,8 +3,10 @@ import { FeaturedProductList } from "./FeaturedProductList";
 import "../../../styles/components/featuredProducts.css";
 
 export function FeaturedProductsContainer() {
-  const productStore = useSelector((state) => state.products);
-  const productIds = useSelector((state) => state.products.orderedProductIds);
+  const productStore = useSelector((state) => state.featuredProducts);
+  const productIds = useSelector(
+    (state) => state.featuredProducts.orderedFeaturedProductIds
+  );
   if (!productIds.length) return false;
   const bannerProduct = productStore[productIds[0]];
 

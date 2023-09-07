@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // backend/bin/www
 
+const cron = require("node-cron");
+
 // Import environment variables
 require("dotenv").config();
 
@@ -8,12 +10,53 @@ const { port } = require("../config");
 
 const app = require("../app");
 const db = require("../db/models");
+const { Order } = require("../db/models");
+const { Op } = require("sequelize");
 
 // Check the database connection before starting the app
 db.sequelize
   .authenticate()
   .then(() => {
     console.log("Database connection success! Sequelize is ready to use...");
+
+    cron.schedule("0 * * * *", async () => {
+      console.log("Running a job every hour to update orders to shipped");
+      try {
+        await Order.update(
+          { status: "shipped" },
+          {
+            where: {
+              status: "pending",
+              createdAt: {
+                [Op.lte]: new Date(new Date() - 60 * 60 * 1000), // 1 hour ago
+              },
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error updating orders to shipped:", error);
+      }
+    });
+    cron.schedule("0 0 * * *", async () => {
+      console.log(
+        "Running a job every day at midnight to update orders to delivered"
+      );
+      try {
+        await Order.update(
+          { status: "delivered" },
+          {
+            where: {
+              status: "shipped",
+              order_date: {
+                [Op.lte]: new Date(new Date() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+              },
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error updating orders to delivered:", error);
+      }
+    });
 
     // Start listening for connections
     app.listen(port, () => console.log(`Listening on port ${port}...`));
