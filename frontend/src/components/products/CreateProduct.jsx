@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileUpload, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileUpload,
+  faX,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -28,6 +32,7 @@ export function CreateProduct({ edit }) {
   const [mainImageDelete, setMainImageDelete] = useState();
   const [additionalImagesDelete, setAdditionalImagesDelete] = useState([]);
   const [additionalImages, setAdditionalImages] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formTouched, setFormTouched] = useState({
     productName: false,
     brandName: false,
@@ -82,7 +87,7 @@ export function CreateProduct({ edit }) {
       setBrandName(product.Brand.name);
       setCategories(product.Categories.map((cat) => cat.name).join(", "));
       setDescription(product.description);
-      setStockQuantity(product.stockQuantity);
+      setStockQuantity(product.stock_quantity);
       setPrice(product.price);
       setMainImage(product.main_image);
       if (product.additional_images) {
@@ -99,7 +104,9 @@ export function CreateProduct({ edit }) {
   const handleDelete = async (e) => {
     e.stopPropagation();
     e.preventDefault();
+    setLoading(true);
     const res = await dispatch(thunkDeleteSingleProduct(product.id));
+    setLoading(false);
     if (res) history.push("/");
   };
 
@@ -121,6 +128,7 @@ export function CreateProduct({ edit }) {
         for (let additionalImage of additionalImages) {
           imageData.append("additional_images[]", additionalImage);
         }
+        setLoading(true);
         const res = await dispatch(
           thunkCreateSingleProduct(
             {
@@ -134,6 +142,7 @@ export function CreateProduct({ edit }) {
             imageData
           )
         );
+        setLoading(false);
         if (res.id) {
           history.push(`/product/${res.id}`);
         }
@@ -145,6 +154,7 @@ export function CreateProduct({ edit }) {
           if (typeof img !== "string")
             imageData.append("additional_images[]", img);
         }
+        setLoading(true);
         const res = await dispatch(
           thunkUpdateSingleProduct(
             product.id,
@@ -161,6 +171,7 @@ export function CreateProduct({ edit }) {
             imageData
           )
         );
+        setLoading(false);
         console.log("THIS IS THE RES, in the component", res);
         history.push(`/product/${res.id}`);
       }
@@ -439,16 +450,26 @@ export function CreateProduct({ edit }) {
           </div>
         </div>
         <button
-          disabled={Object.values(formErrors).length > 0 && formTouched.submit}
+          disabled={
+            (Object.values(formErrors).length > 0 && formTouched.submit) ||
+            loading
+          }
           type='submit'
           className='product__create__form-submit'
         >
-          {edit ? "Edit" : "Create"}
+          {edit && !loading ? (
+            "Edit"
+          ) : !edit && !loading ? (
+            "Create"
+          ) : (
+            <FontAwesomeIcon className='spinner' icon={faSpinner} />
+          )}
         </button>
-        {edit && (
+        {edit && !loading ? (
           <button
             disabled={
-              Object.values(formErrors).length > 0 && formTouched.submit
+              (Object.values(formErrors).length > 0 && formTouched.submit) ||
+              loading
             }
             type='button'
             className='product__create__form-delete'
@@ -457,6 +478,9 @@ export function CreateProduct({ edit }) {
             {" "}
             Delete{" "}
           </button>
+        ) : (
+          edit &&
+          loading && <FontAwesomeIcon className='spinner' icon={faSpinner} />
         )}
       </form>
     </>

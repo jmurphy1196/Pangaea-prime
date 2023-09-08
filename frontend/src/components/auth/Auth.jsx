@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import "../../styles/components/auth.css";
 import { thunkCreateUser, thunkSetSession } from "../../store/session";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 //eslint-disable-next-line
 export function Auth({ signin, signup }) {
@@ -13,6 +15,7 @@ export function Auth({ signin, signup }) {
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   useEffect(() => {
@@ -20,13 +23,16 @@ export function Auth({ signin, signup }) {
   }, [signin, signup]);
   const loginDemo = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const res = await dispatch(
       thunkSetSession({ credential: "Demo-lition", password: "password" })
     );
+    setLoading(false);
     if (res.user) history.push("/");
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (signin) {
       const res = await dispatch(thunkSetSession({ credential, password }));
       console.log("This is the res", res);
@@ -43,6 +49,7 @@ export function Auth({ signin, signup }) {
       );
 
       //   TODO DRY THIS UP
+      setLoading(false);
       if (res.user) history.push("/");
       if (res.errors) {
         const newErrors = {};
@@ -115,11 +122,21 @@ export function Auth({ signin, signup }) {
         {signup && signupFormGroups}
         {signin && (
           <button className='auth__form__demo' onClick={loginDemo}>
-            Demo user
+            {!loading ? (
+              "Demo User"
+            ) : (
+              <FontAwesomeIcon className='spinner' icon={faSpinner} />
+            )}
           </button>
         )}
         <button className='auth__form__submit' type='submit'>
-          {signin ? "Signin" : "Signup"}
+          {signin && !loading ? (
+            "Signin"
+          ) : !signin && !loading ? (
+            "Signup"
+          ) : (
+            <FontAwesomeIcon className='spinner' icon={faSpinner} />
+          )}
         </button>
       </form>
       <div className='auth-page__account'>
