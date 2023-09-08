@@ -1,5 +1,6 @@
 "use strict";
 
+const { FeaturedProduct } = require("../models"); // You need to provide the correct path to your User model
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
@@ -8,11 +9,8 @@ if (process.env.NODE_ENV === "production") {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = "FeaturedProducts";
-
     try {
-      await queryInterface.bulkInsert(
-        "FeaturedProducts",
+      return FeaturedProduct.bulkCreate(
         [
           { productId: 1 },
           { productId: 2 },
@@ -23,13 +21,12 @@ module.exports = {
         options
       );
     } catch (e) {
+      console.log("ERROR!!!");
       console.log(e);
     }
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "FeaturedProducts";
-
     await queryInterface.bulkDelete(
       "FeaturedProducts",
       {
