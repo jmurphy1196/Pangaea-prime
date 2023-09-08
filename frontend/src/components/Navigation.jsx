@@ -6,6 +6,7 @@ import {
   faLocationDot,
   faSearch,
   faCartShopping,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/components/navbar.css";
 import { thunkGetCategories } from "../store/categories";
@@ -94,6 +95,9 @@ export function Navigation() {
           </div>
         </div>
         <div className='navbar__container navbar__container__right'>
+          <button className='mobile-menu'>
+            <FontAwesomeIcon icon={faBars} className='mobile-icon' />
+          </button>
           <div className='navbar__actions'>
             <div className='navbar__actions__item'>
               <Link to='/account'>
