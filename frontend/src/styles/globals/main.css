@@ -38,7 +38,6 @@ button {
 body {
   padding: 0;
   margin: 0;
-  border: 1px solid purple;
   min-height: 100vh;
   position: relative;
 }
@@ -87,3 +86,16 @@ body {
   display: none !important;
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+  
+}
+
+.spinner {
+  animation: spin 1s linear infinite; 
+}

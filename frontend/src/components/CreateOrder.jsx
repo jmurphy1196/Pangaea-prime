@@ -2,7 +2,7 @@ import { US_STATES } from "../constants";
 import "../styles/components/createOrder.css";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,6 +23,7 @@ export function CreateOrder() {
   const [formPage, setFormPage] = useState(1);
   const [formErrors, setFormErrors] = useState({});
   const [formTouched, setFormTouched] = useState(false);
+  const [loading, setLoading] = useState(false);
   const cardElement = elements.getElement(CardElement);
   const history = useHistory();
 
@@ -45,6 +46,7 @@ export function CreateOrder() {
   const handleCard = async () => {
     setFormTouched(true);
     if (!Object.values(formErrors).length) {
+      setLoading(false);
       if (!stripe || !elements) {
         return;
       }
@@ -52,10 +54,12 @@ export function CreateOrder() {
 
       const cardElement = elements.getElement(CardElement);
 
+      setLoading(true);
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
       });
+      setLoading(false);
 
       if (error) {
         console.error(error);
@@ -74,7 +78,9 @@ export function CreateOrder() {
       postalCode,
     };
     if (address_2.length > 0) addressData.address_2 = address_2;
+    setLoading(true);
     const res = await dispatch(thunkCreateOrder(addressData));
+    setLoading(false);
     if (res.id) history.push(`/orders/${res.id}`);
   };
   if (!stripe || !cart) return false;
@@ -116,7 +122,11 @@ export function CreateOrder() {
           onClick={handleCard}
           disabled={Object.values(formErrors).length > 0 && formTouched}
         >
-          Continue <FontAwesomeIcon icon={faArrowRight} />
+          {!loading ? (
+            <FontAwesomeIcon icon={faArrowRight} />
+          ) : (
+            <FontAwesomeIcon icon={faSpinner} spin />
+          )}
         </button>
       </div>
     </form>
