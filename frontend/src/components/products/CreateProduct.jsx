@@ -107,7 +107,7 @@ export function CreateProduct({ edit }) {
     setLoading(true);
     const res = await dispatch(thunkDeleteSingleProduct(product.id));
     setLoading(false);
-    if (res) history.push("/");
+    if (res) history.push("/account");
   };
 
   const handleSubmit = async (e) => {

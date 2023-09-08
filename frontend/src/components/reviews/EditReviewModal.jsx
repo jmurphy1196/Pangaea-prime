@@ -14,6 +14,7 @@ import {
 export function EditReviewModal({ isOpen, onClose, productId }) {
   const dispatch = useDispatch();
   const review = useSelector((state) => state.singleProduct.userReview);
+  const [loading, setLoading] = useState(false);
   const [currentRating, setCurrentRating] = useState(
     review ? review.rating : 1
   );
