@@ -173,3 +173,39 @@
 }
     
 }
+.mobile-menu {
+    display: none;
+}
+@media screen and (max-width: 600px) {
+    .subbar{
+        display: none;
+    }
+    .navbar__actions {
+        display: none;
+    }
+    .navbar__location {
+        display: none;
+    }
+    .navbar__container__middle{
+        width: 100%;
+    }
+    .navbar__container__right {
+        width: fit-content;
+    }
+    .navbar__search-container {
+        width: 100%;
+    }
+    .navbar__image {
+        width: 60px;
+    }
+.mobile-menu {
+    display: flex;
+    margin-left: 100%;
+    padding: 5px;
+    transform: translateX(-50%);
+
+}
+.mobile-icon {
+    font-size: 1.5rem;
+}
+}
