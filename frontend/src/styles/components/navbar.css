@@ -6,8 +6,55 @@
     display: flex;
     gap: 10px;
     justify-content: space-between;
+    position: relative;
+}
+.mobile-menu-container {
+    position: absolute;
+    right: 1px;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, .3);
+    z-index: 9999;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+.mobile {
+
+    width: 250px;
+    height: 100vh;
+    background-color: #FAFAFA;
+    position: relative;
+    animation: slideIn .3s ease forwards;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
 }
 
+.mobile ul {
+    color: black;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.close-mobile {
+    position: absolute;
+    color: var(--primary);
+    font-size: 2.0rem;
+    background-color: white;
+    border: none;
+    left: 100%;
+    transform: translateX(-110%);
+}
+
+.mobile-categories {
+    list-style: none;
+    color: black;
+    font-size: 1.1rem;
+}
 .navbar__container {
     display: flex;
     gap: 10px;
