@@ -3,19 +3,22 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkRemoveProductCart, thunkUpdateProductQty } from "../store/cart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export function CartProduct({ product }) {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [selectedQuantity, setSelectedQuantity] = useState(
     product.CartProduct.quantity || 1
   );
   if (!product) return false;
 
   const handleUpdateQty = async () => {
+    setLoading(true);
     const res = await dispatch(
       thunkUpdateProductQty(product.id, selectedQuantity)
     );
+    setLoading(false);
   };
   const handleDeleteProduct = async () => {
     const res = await dispatch(thunkRemoveProductCart(product.id));
@@ -47,7 +50,9 @@ export function CartProduct({ product }) {
             max={product.stock_quantity}
           />
           {selectedQuantity != product.CartProduct.quantity && (
-            <button onClick={handleUpdateQty}>Update</button>
+            <button onClick={handleUpdateQty}>
+              {!loading ? "Update" : <FontAwesomeIcon icon={faSpinner} spin />}
+            </button>
           )}
         </div>
         <div className='cart__product-delete'>

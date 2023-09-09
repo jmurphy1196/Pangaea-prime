@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useHistory } from "react-router-dom";
 
@@ -13,9 +13,9 @@ export function ProductDetails() {
   const user = useSelector((state) => state.session.user);
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [productInCart, setProductInCart] = useState(false);
   const history = useHistory();
-  console.log("KLSDJFLKJDSFKLJFDSLKJFLKSDJ");
   if (cart) {
     console.log(cart.products.find((p) => p.id == product.id));
   }
@@ -29,7 +29,9 @@ export function ProductDetails() {
   if (!product) return false;
 
   const handleAddProductToCart = async (e) => {
+    setLoading(true);
     const res = await dispatch(thunkAddProductToCart(product.id, 1));
+    setLoading(false);
   };
   return (
     <>
@@ -71,10 +73,16 @@ export function ProductDetails() {
               <button onClick={(e) => history.push(`/cart`)}> In Cart</button>
             ) : (
               <button
-                disabled={product.stock_quantity <= 0}
+                disabled={product.stock_quantity <= 0 || loading}
                 onClick={handleAddProductToCart}
               >
-                {product.stock_quantity <= 0 ? "Out of Stock" : "Add to Cart"}
+                {product.stock_quantity <= 0 ? (
+                  "Out of Stock"
+                ) : !loading ? (
+                  "Add to Cart"
+                ) : (
+                  <FontAwesomeIcon icon={faSpinner} spin />
+                )}
               </button>
             )}
             {user && user.id == product.seller_id && (
