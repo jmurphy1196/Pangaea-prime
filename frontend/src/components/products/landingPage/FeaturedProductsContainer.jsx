@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { FeaturedProductList } from "./FeaturedProductList";
+import { Link } from "react-router-dom";
 import "../../../styles/components/featuredProducts.css";
 
 export function FeaturedProductsContainer() {
@@ -18,7 +19,9 @@ export function FeaturedProductsContainer() {
             <h1>{bannerProduct.product_name}</h1>
             <h1 className='featured__banner__price'>${bannerProduct.price}</h1>
           </header>
-          <img src={productStore[productIds[0]].main_image} alt='' />
+          <Link to={`/product/${bannerProduct.id}`}>
+            <img src={productStore[productIds[0]].main_image} alt='' />
+          </Link>
         </div>
         <FeaturedProductList />
       </div>
