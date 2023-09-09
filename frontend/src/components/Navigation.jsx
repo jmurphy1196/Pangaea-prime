@@ -20,6 +20,7 @@ export function Navigation() {
     (state) => state.categories.orderedCategories || []
   );
   const [search, setSearch] = useState("");
+  const [mobileMenuActive, setMobileMenuActive] = useState(false);
   const [location, setLocation] = useState({
     lat: null,
     lng: null,
@@ -95,7 +96,12 @@ export function Navigation() {
           </div>
         </div>
         <div className='navbar__container navbar__container__right'>
-          <button className='mobile-menu'>
+          <button
+            className='mobile-menu'
+            onClick={() => {
+              setMobileMenuActive(true);
+            }}
+          >
             <FontAwesomeIcon icon={faBars} className='mobile-icon' />
           </button>
           <div className='navbar__actions'>
@@ -125,6 +131,46 @@ export function Navigation() {
             </div>
           </div>
         </div>
+        {mobileMenuActive && (
+          <div
+            className='mobile-menu-container'
+            onClick={() => setMobileMenuActive(false)}
+          >
+            <nav className='mobile'>
+              <button className='close-mobile'>
+                <FontAwesomeIcon
+                  icon={faBars}
+                  className='mobile-icon-close'
+                  onClick={() => setMobileMenuActive(false)}
+                />
+              </button>
+              {user && (
+                <ul className='my-account'>
+                  <h3>My Account</h3>
+                  <li>
+                    <Link to='/cart'>Cart</Link>
+                  </li>
+                  <li>
+                    <Link to='/orders'>Orders</Link>
+                  </li>
+                </ul>
+              )}
+              <ul className='mobile-categories'>
+                <h3>Categories</h3>
+                {categories.map((category) => (
+                  <li key={category.id}>
+                    <Link
+                      key={category.id}
+                      to={`/products?categories=${category.name}`}
+                    >
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        )}
       </nav>
       <nav className='subbar'>
         {/* <div className='subbar__all'>
