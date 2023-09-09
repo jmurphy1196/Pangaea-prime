@@ -84,7 +84,10 @@ export function Footer() {
             </li>
             <li>
               <span>
-                <FontAwesomeIcon icon={faQuestion} /> <a href=''>About</a>
+                <FontAwesomeIcon icon={faQuestion} />{" "}
+                <a href='https://my-portfolio-js.vercel.app/projects/pangaea-prime'>
+                  About
+                </a>
               </span>
             </li>
           </ul>
