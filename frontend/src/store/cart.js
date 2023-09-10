@@ -138,6 +138,9 @@ export const cartReducer = (state = initalState, action) => {
     case actionTypes.CREATE_ORDER: {
       return initalState;
     }
+    case actionTypes.REMOVE_SESSION: {
+      return initalState;
+    }
     default:
       return state;
   }

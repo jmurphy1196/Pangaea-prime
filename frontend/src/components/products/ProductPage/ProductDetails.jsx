@@ -29,6 +29,7 @@ export function ProductDetails() {
   if (!product) return false;
 
   const handleAddProductToCart = async (e) => {
+    if (!user) return history.push("/signin");
     setLoading(true);
     const res = await dispatch(thunkAddProductToCart(product.id, 1));
     setLoading(false);
