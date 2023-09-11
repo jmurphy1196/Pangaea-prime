@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Define association with Product
-      OrderProduct.belongsTo(models.Product, {
-        foreignKey: "product_id",
-        as: "product",
-        onDelete: "CASCADE",
-      });
+      // OrderProduct.belongsTo(models.Product, {
+      //   foreignKey: "product_id",
+      //   as: "product",
+      //   onDelete: "CASCADE",
+      // });
     }
   }
   OrderProduct.init(
@@ -31,14 +31,32 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
       },
-      product_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Products",
-          key: "id",
-          onDelete: "CASCADE",
+      // product_id: {
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: "Products",
+      //     key: "id",
+      //     onDelete: "CASCADE",
+      //   },
+      // },
+      product_name: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: true,
+          len: [1, 255],
         },
       },
+      price: {
+        type: DataTypes.DECIMAL,
+        validate: {
+          isDecimal: true,
+          min: 0,
+          max: 99999,
+        },
+      },
+      product_id: DataTypes.INTEGER,
+      seller_id: DataTypes.INTEGER,
+      main_image: DataTypes.STRING,
       quantity: DataTypes.INTEGER,
     },
     {

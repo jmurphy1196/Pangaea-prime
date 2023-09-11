@@ -64,8 +64,12 @@ router.post(
     for (let cartProduct of userCart.CartProducts) {
       await OrderProduct.create({
         order_id: newOrder.id,
-        product_id: cartProduct.product.id,
         quantity: cartProduct.quantity,
+        product_id: cartProduct.product.id,
+        main_image: cartProduct.product.main_image,
+        seller_id: cartProduct.product.seller_id,
+        product_name: cartProduct.product.product_name,
+        price: cartProduct.product.price,
       });
     }
     // delete all items in users cart
@@ -90,12 +94,6 @@ router.get(
         {
           model: OrderProduct,
           as: "products",
-          include: [
-            {
-              model: Product,
-              as: "product",
-            },
-          ],
         },
       ],
     });
