@@ -114,6 +114,14 @@ export function CreateOrder() {
         </select>
       </div>
       <div className='card-container'>
+        <span>Example card information: </span> <br />
+        <span>Card Number: 4242 4242 4242 4242 </span>
+        <br />
+        <span>Expiration: 12/25</span>
+        <br />
+        <span>Postal Code: 12345</span>
+        <br />
+        <br />
         <CardElement />
       </div>
       <div className='create__order-address__group f-end'>
