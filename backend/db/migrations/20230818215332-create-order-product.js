@@ -23,17 +23,32 @@ module.exports = {
             key: "id",
           },
         },
-        product_id: {
-          type: Sequelize.INTEGER,
-          references: {
-            model: "Products",
-            key: "id",
+        // product_id: {
+        //   type: Sequelize.INTEGER,
+        //   references: {
+        //     model: "Products",
+        //     key: "id",
+        //   },
+        // },
+        product_name: {
+          type: Sequelize.STRING,
+          validate: {
+            notEmpty: true,
+            len: [1, 255],
           },
         },
-        quantity: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
+        price: {
+          type: Sequelize.DECIMAL,
+          validate: {
+            isDecimal: true,
+            min: 0,
+            max: 99999,
+          },
         },
+        product_id: Sequelize.INTEGER,
+        seller_id: Sequelize.INTEGER,
+        main_image: Sequelize.STRING,
+        quantity: Sequelize.INTEGER,
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,

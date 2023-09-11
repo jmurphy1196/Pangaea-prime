@@ -24,12 +24,7 @@ export function OrderProducts({ products }) {
                   ? product.CartProduct.quantity
                   : product.quantity}
               </p>
-              <p>
-                Price: $
-                {product.CartProduct
-                  ? product.CartProduct.quantity * product.price
-                  : product.quantity * product.product.price}
-              </p>
+              <p>Price: ${product.quantity * product.price}</p>
             </div>
           </div>
         ))}
@@ -39,7 +34,7 @@ export function OrderProducts({ products }) {
           Items:{" "}
           {/* {products.reduce((acc, val) => acc + val.CartProduct.quantity, 0)} */}
           {products.reduce((acc, val) => {
-            if (val.CartProduct) return acc + val.CartProduct.quantity;
+            if (val.CartProduct) return acc + val.quantity;
             return acc + val.quantity;
           }, 0)}
         </span>
@@ -53,9 +48,7 @@ export function OrderProducts({ products }) {
           ).toFixed(2)} */}
           {Number(
             products.reduce((acc, val) => {
-              if (val.CartProduct)
-                return acc + val.price * val.CartProduct.quantity;
-              return acc + val.product.price * val.quantity;
+              return acc + val.price * val.quantity;
             }, 0)
           ).toFixed(2)}
         </span>
